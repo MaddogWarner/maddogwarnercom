@@ -179,12 +179,6 @@ const skills = [
   const cards = document.querySelectorAll('.crew-card');
   const skillCards = document.querySelectorAll('.skill');
 
-  const syncSkillsForViewport = () => {
-    if (window.innerWidth > 860) {
-      skillCards.forEach((card) => { (card as HTMLDetailsElement).open = true; });
-    }
-  };
-
   cards.forEach((card) => {
     card.addEventListener('toggle', () => {
       if (syncing) return;
@@ -209,8 +203,6 @@ const skills = [
     });
   });
 
-  syncSkillsForViewport();
-  window.addEventListener('resize', syncSkillsForViewport);
 </script>
 
 <style>
@@ -438,17 +430,4 @@ const skills = [
     }
   }
 
-  @media (min-width: 861px) {
-    .skill summary {
-      cursor: default;
-    }
-
-    .skill summary::after {
-      content: none;
-    }
-
-    .skill:not([open]) ul {
-      display: grid;
-    }
-  }
 </style>
