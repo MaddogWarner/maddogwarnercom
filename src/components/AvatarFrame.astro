@@ -1,0 +1,63 @@
+---
+import { ShieldCheck } from '@lucide/astro';
+---
+
+<div class="avatar-frame" aria-label="MadDogWarner avatar">
+  <img src="/maddog.png" alt="MadDogWarner avatar" />
+  <span class="scanlines" aria-hidden="true"></span>
+  <span class="badge" aria-hidden="true"><ShieldCheck size={24} /></span>
+</div>
+
+<style>
+  .avatar-frame {
+    position: relative;
+    aspect-ratio: 1;
+    width: min(25rem, 82vw);
+    border: 2px solid rgba(0, 180, 255, 0.75);
+    border-radius: 50%;
+    padding: 0.55rem;
+    animation: pulse-ring 3.2s ease-in-out infinite;
+    background: rgba(5, 5, 8, 0.78);
+  }
+
+  img,
+  .scanlines {
+    position: absolute;
+    inset: 0.55rem;
+    border-radius: 50%;
+  }
+
+  img {
+    height: calc(100% - 1.1rem);
+    width: calc(100% - 1.1rem);
+    object-fit: cover;
+  }
+
+  .scanlines {
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.03) 0,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+    mix-blend-mode: screen;
+  }
+
+  .badge {
+    position: absolute;
+    right: 10%;
+    bottom: 7%;
+    display: grid;
+    width: 3.5rem;
+    height: 3.5rem;
+    place-items: center;
+    border: 1px solid var(--color-accent);
+    border-radius: 50%;
+    background: rgba(5, 5, 8, 0.92);
+    color: var(--color-accent);
+    box-shadow: 0 0 20px var(--color-glow);
+  }
+</style>
+

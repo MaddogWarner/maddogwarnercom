@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+
+const lastUpdated = '20 May 2026';
+---
+
+<BaseLayout title="Data Collection" description="Data collection brief for MadDogWarner.com.">
+  <section class="section legal">
+    <div class="container">
+      <SectionHeader eyebrow="// data.collection" title="Data Collection Brief" text={`Last updated: ${lastUpdated} AEST`} />
+
+      <div class="brief surface-card">
+        <p>
+          This brief summarises what may be collected when you use MadDogWarner.com. It is intended as a
+          plain-language collection notice for a static personal website.
+        </p>
+      </div>
+
+      <div class="table-wrap surface-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Examples</th>
+              <th>Source</th>
+              <th>Purpose</th>
+              <th>Shared with</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Technical identifiers</td>
+              <td>IP address, user agent, request time, request URL, referrer, response status</td>
+              <td>Your browser and network</td>
+              <td>Serve pages, secure the site, troubleshoot faults, prevent abuse</td>
+              <td>Hosting, CDN, DNS, and security providers</td>
+            </tr>
+            <tr>
+              <td>Device and browser data</td>
+              <td>Browser type, operating system, viewport behaviour exposed through normal HTTP requests</td>
+              <td>Your browser</td>
+              <td>Compatibility, performance, diagnostics, security monitoring</td>
+              <td>Hosting and CDN providers</td>
+            </tr>
+            <tr>
+              <td>Font delivery requests</td>
+              <td>Requests made by your browser to load Google Fonts</td>
+              <td>Your browser</td>
+              <td>Render the site typography</td>
+              <td>Google font infrastructure</td>
+            </tr>
+            <tr>
+              <td>Voluntary communications</td>
+              <td>Information you choose to send through external channels</td>
+              <td>You</td>
+              <td>Read and respond to your message</td>
+              <td>Relevant communications provider used by you and MadDogWarner</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="content">
+        <h2>What is not currently collected</h2>
+        <ul>
+          <li>no site accounts</li>
+          <li>no payment details</li>
+          <li>no newsletter signup</li>
+          <li>no comments or contact form submissions through the site</li>
+          <li>no intentional collection of health, biometric, financial, or government identifier data</li>
+          <li>no sale of personal information</li>
+        </ul>
+
+        <h2>Retention summary</h2>
+        <p>
+          MadDogWarner.com does not maintain visitor profiles. Any server, CDN, or security logs are expected
+          to be retained only for operational, diagnostic, abuse prevention, security, or legal purposes.
+        </p>
+
+        <h2>Future changes</h2>
+        <p>
+          If analytics, contact forms, newsletters, comments, embedded media, or login features are added,
+          this brief and the privacy notice should be updated before those features are published.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding-top: 5rem;
+  }
+
+  .brief,
+  .table-wrap {
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+  }
+
+  .brief p {
+    margin: 0;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.9rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--color-accent);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.82rem;
+  }
+
+  td,
+  p,
+  li {
+    color: var(--color-muted);
+  }
+
+  .content {
+    max-width: 78ch;
+  }
+
+  h2 {
+    margin: 2rem 0 0.7rem;
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    letter-spacing: 0;
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+</style>
+

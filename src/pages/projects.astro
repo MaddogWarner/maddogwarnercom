@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+type Repo = {
+  name: string;
+  description?: string;
+  language?: string;
+  stars?: number;
+  url: string;
+  topics?: string[];
+  updatedAt?: string;
+};
+
+let repos: Repo[] = [];
+
+try {
+  const res = await fetch('https://api.github.com/users/MadDogWarner/repos?sort=updated&per_page=20');
+  if (res.ok) {
+    const data = await res.json();
+    repos = data
+      .filter((repo: any) => !repo.fork)
+      .sort((a: any, b: any) => new Date(b.updated_at).valueOf() - new Date(a.updated_at).valueOf())
+      .map((repo: any) => ({
+        name: repo.name,
+        description: repo.description,
+        language: repo.language,
+        stars: repo.stargazers_count,
+        url: repo.html_url,
+        topics: repo.topics ?? [],
+        updatedAt: repo.updated_at,
+      }));
+  }
+} catch {
+  repos = [];
+}
+
+if (!repos.length) {
+  const fallback = await getCollection('projects');
+  repos = fallback.map((project) => ({
+    name: project.data.name,
+    description: project.data.description,
+    language: project.data.language,
+    stars: project.data.stars,
+    url: project.data.url,
+    topics: project.data.tags,
+  }));
+}
+---
+
+<BaseLayout title="Projects" description="MadDogWarner projects and GitHub repositories.">
+  <section class="section">
+    <div class="container">
+      <SectionHeader eyebrow="// projects.index" title="Projects" text="Build-time GitHub data with local content fallback." />
+      <div class="grid">
+        {repos.map((repo) => <ProjectCard repo={repo} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 1020px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 680px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+

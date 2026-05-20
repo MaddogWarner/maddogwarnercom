@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+
+const lastUpdated = '20 May 2026';
+---
+
+<BaseLayout title="Privacy" description="Privacy notice for MadDogWarner.com.">
+  <section class="section legal">
+    <div class="container">
+      <SectionHeader eyebrow="// privacy.notice" title="Privacy" text={`Last updated: ${lastUpdated} AEST`} />
+
+      <div class="notice surface-card">
+        <p>
+          This page is a general privacy notice for MadDogWarner.com. It is written for transparency
+          across common privacy frameworks, including Australian Privacy Principles, GDPR/UK GDPR-style
+          transparency expectations, and California notice-at-collection concepts. It is not legal advice.
+        </p>
+      </div>
+
+      <div class="content">
+        <h2>Who operates this site</h2>
+        <p>
+          This site is operated under the online identity <strong>MadDogWarner</strong>. No real-name
+          identity is published on the site.
+        </p>
+
+        <h2>What this site collects</h2>
+        <p>
+          The site is currently a static website. It does not provide user accounts, checkout, newsletter
+          signup, comments, contact forms, advertising pixels, or application login.
+        </p>
+        <p>The following limited technical data may still be processed when you visit:</p>
+        <ul>
+          <li>standard web server and CDN logs, such as IP address, request URL, user agent, referrer, timestamp, and response status</li>
+          <li>browser requests to third-party font infrastructure when Google Fonts are loaded</li>
+          <li>information you voluntarily disclose if you contact MadDogWarner outside this website</li>
+        </ul>
+
+        <h2>Why data may be processed</h2>
+        <ul>
+          <li>to serve the website and requested pages</li>
+          <li>to maintain availability, performance, and operational resilience</li>
+          <li>to detect abuse, troubleshoot faults, and protect the site from malicious traffic</li>
+          <li>to respond to voluntary communications received outside the website</li>
+        </ul>
+
+        <h2>Legal basis and transparency</h2>
+        <p>
+          Where GDPR or UK GDPR concepts apply, the likely basis for limited technical processing is
+          legitimate interests in operating, securing, and maintaining a static website. Where consent is
+          legally required for a future feature, that feature should not be enabled until an appropriate
+          consent or preference mechanism exists.
+        </p>
+
+        <h2>Cookies and analytics</h2>
+        <p>
+          This site does not currently set first-party analytics or marketing cookies. If analytics,
+          embedded media, advertising, comments, or newsletter tooling are added later, this notice should
+          be updated before those features go live.
+        </p>
+
+        <h2>Sharing and third parties</h2>
+        <p>Data may be processed by service providers that are technically necessary to deliver the site, including:</p>
+        <ul>
+          <li>hosting, CDN, DNS, and security providers</li>
+          <li>Google Fonts infrastructure for font delivery</li>
+          <li>GitHub when you follow external repository links</li>
+        </ul>
+        <p>
+          This site does not sell personal information and does not intentionally share personal information
+          for cross-context behavioural advertising.
+        </p>
+
+        <h2>International processing</h2>
+        <p>
+          Because this is a public website delivered through global internet infrastructure, technical data
+          may be processed in countries outside your location. Service provider processing is governed by
+          the relevant provider terms and controls.
+        </p>
+
+        <h2>Retention</h2>
+        <p>
+          Static site content does not require visitor profiles. Technical logs, if retained by hosting or
+          security providers, should be kept only as long as required for operations, diagnostics, security,
+          abuse prevention, or legal compliance.
+        </p>
+
+        <h2>Your rights</h2>
+        <p>
+          Depending on your jurisdiction, you may have rights to access, correct, delete, restrict, object to,
+          or receive a copy of personal information, and to complain to a privacy regulator. These rights may
+          be limited where the site operator does not hold identifiable visitor records.
+        </p>
+
+        <h2>Security</h2>
+        <p>
+          The site is designed as a static deployment with no database, no authentication layer, and no
+          intentional collection of sensitive personal information. Security headers are configured for
+          baseline browser protection. Do not submit secrets, credentials, health information, or other
+          sensitive data through any channel unless explicitly requested through a secure process.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          This notice should be reviewed whenever analytics, contact forms, newsletters, embedded content,
+          comments, account features, or other data-collecting functionality is added.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding-top: 5rem;
+  }
+
+  .notice {
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+  }
+
+  .notice p {
+    margin: 0;
+  }
+
+  .content {
+    max-width: 78ch;
+  }
+
+  h2 {
+    margin: 2rem 0 0.7rem;
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    letter-spacing: 0;
+  }
+
+  p,
+  li {
+    color: var(--color-muted);
+  }
+
+  strong {
+    color: var(--color-text);
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+</style>
+

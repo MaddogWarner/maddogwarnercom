@@ -1,0 +1,174 @@
+---
+import { Brain, Network, Radar, Server, Shield, SquareCode, Terminal, Workflow } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AvatarFrame from '../components/AvatarFrame.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import TagBadge from '../components/TagBadge.astro';
+
+const skills = [
+  { label: 'Network Security', icon: Shield },
+  { label: 'Penetration Testing', icon: Terminal },
+  { label: 'Homelab Infrastructure', icon: Server },
+  { label: 'DevOps', icon: Workflow },
+  { label: 'Threat Detection', icon: Radar },
+  { label: 'SIEM/Logging', icon: Network },
+];
+---
+
+<BaseLayout title="About" description="About MadDogWarner, Claude, and Codex.">
+  <section class="about-hero">
+    <div class="container">
+      <SectionHeader eyebrow="// about.md" title="MadDogWarner and the crew" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container profile">
+      <AvatarFrame />
+      <div>
+        <h2>MadDogWarner</h2>
+        <p>IT professional by trade. Homelab operator by passion. Security researcher by necessity.</p>
+        <p>[placeholder - update with personal background, certifications, focus areas]</p>
+        <div class="tags">
+          {['homelab', 'cybersecurity', 'netops', 'devops'].map((tag) => <TagBadge tag={tag} />)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <SectionHeader eyebrow="// team" title="The Crew" />
+      <div class="crew">
+        <article class="surface-card">
+          <Brain size={32} aria-hidden="true" />
+          <h3>Claude</h3>
+          <p class="role">AI Architect & Advisor</p>
+          <p>Plans the builds, reviews the code, writes the briefs. Anthropic's Claude - the brains behind the blueprint.</p>
+        </article>
+        <article class="surface-card">
+          <SquareCode size={32} aria-hidden="true" />
+          <h3>Codex</h3>
+          <p class="role">AI Developer</p>
+          <p>Turns the plan into working code. OpenAI's Codex - fingers on the keyboard, always shipping.</p>
+        </article>
+      </div>
+      <p class="note mono">All three of us built this site.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeader eyebrow="// focus" title="Skills and Focus Areas" />
+      <div class="skills">
+        {skills.map(({ label, icon: Icon }) => (
+          <div class="skill surface-card">
+            <Icon size={24} aria-hidden="true" />
+            <span>{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-hero {
+    background:
+      linear-gradient(rgba(5, 5, 8, 0.72), rgba(5, 5, 8, 0.92)),
+      url('/images/about-bg.png') center / cover;
+    padding: 6rem 0 3rem;
+  }
+
+  .profile {
+    display: grid;
+    grid-template-columns: minmax(14rem, 20rem) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .profile :global(.avatar-frame) {
+    width: min(20rem, 100%);
+    justify-self: center;
+  }
+
+  .profile > div:last-child {
+    min-width: 0;
+  }
+
+  h2,
+  h3 {
+    margin: 0;
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+
+  p {
+    color: var(--color-muted);
+  }
+
+  .tags,
+  .crew,
+  .skills {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .alt {
+    background: rgba(13, 13, 26, 0.36);
+  }
+
+  .crew {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .crew article,
+  .skill {
+    padding: 1.25rem;
+  }
+
+  .crew svg,
+  .skill svg {
+    color: var(--color-accent);
+  }
+
+  .role,
+  .note {
+    color: var(--color-terminal);
+  }
+
+  .skills {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .skill {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    font-weight: 800;
+  }
+
+  @media (max-width: 980px) {
+    .profile {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .crew,
+    .skills {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

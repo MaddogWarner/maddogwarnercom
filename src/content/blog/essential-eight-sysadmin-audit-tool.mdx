@@ -1,0 +1,140 @@
+---
+title: "Essential Eight Needs Better Sysadmin Tooling"
+description: "Compliance spreadsheets do not harden servers. Sysadmins need practical Essential Eight audit tooling that shows risk, quick wins, and progress."
+date: 2026-05-20
+tags: ["cybersecurity", "essential-eight", "sysadmin", "powershell", "compliance"]
+draft: false
+image: "/images/essential-eight-sysadmin-audit-tool.png"
+---
+
+There is a special kind of corporate theatre where a technical team gets handed a spreadsheet, a maturity target, and a cheerful request to "just get compliant". No context. No prioritisation. No tooling that speaks Windows, Entra ID, PowerShell, GPO, servers, endpoints, or the awkward hybrid mess that every real environment eventually becomes.
+
+The [Essential Eight maturity model](https://www.cyber.gov.au/business-government/asds-cyber-security-frameworks/essential-eight/essential-eight-maturity-model-and-ism-mapping) is useful. It gives organisations a common language for hardening, resilience, and security uplift. The problem is not the framework. The problem is pretending that a framework automatically becomes an implementation plan once it has been pasted into Excel.
+
+Sysadmins do not need more yelling from security and compliance teams. They need tools that show what is configured, what is missing, what matters most, and what can be fixed without setting fire to production.
+
+## Maturity is not a race track
+
+Moving from ML0 to ML3 across the Essential Eight strategies is a good long-term goal. But chasing every uplift evenly can be a blunt instrument.
+
+Different industries get hit differently. A healthcare environment with sensitive patient data, legacy clinical systems, shared workstations, third-party portals, and hybrid identity risk does not have the same threat profile as a small office with ten laptops and a file share named `FINAL_FINAL_REAL_ONE`.
+
+Attackers do not politely wait for your roadmap to reach "Q4 application control phase three". They use the paths that are available now:
+
+- stolen credentials
+- exposed remote access
+- weak MFA coverage
+- PowerShell abuse
+- script execution
+- unmanaged admin privileges
+- poor logging
+- internet-facing systems with patching debt
+
+So yes, aim for maturity. But use risk to choose the order of operations. If your vertical is being hammered by credential theft and hands-on-keyboard intrusion, uplift identity, admin control, logging, and command visibility early. If your estate has internet-facing servers, prioritise logging, patching, exposure reduction, and detection paths. If you operate clinical systems that cannot tolerate disruption, sequence application control carefully instead of turning it into a morale demolition derby.
+
+Compliance wants the boxes ticked. Operations needs the boxes to mean something.
+
+## Quick wins are not fake wins
+
+There is a weird attitude in some audit conversations that only the hardest controls count. If it did not involve six workshops, three CABs, and someone crying quietly over AppLocker policy inheritance, was it even security?
+
+Yes. It was.
+
+Quick wins matter because they build momentum, reduce immediate risk, and create evidence, which is the bit compliance teams claim to love until you ask them where they want the logs shipped.
+
+Application control is important. It is also difficult to implement well in messy enterprise environments, especially where legacy applications, admin tooling, vendor agents, and clinical software all have opinions. If a team starts there, gets bogged down, and sees no visible progress for months, people burn out.
+
+That is why sysadmin-focused audit tooling matters. It should show small, useful, defensible steps:
+
+- which controls already have partial coverage
+- which settings can be verified quickly
+- which gaps are high risk
+- which fixes are low effort
+- what evidence can be exported for the clipboard enthusiasts in governance
+
+You still need the hard controls. You just do not need to start every journey by faceplanting into the hardest one.
+
+## Logging is a proper early win
+
+ASD's [system hardening guidance](https://www.cyber.gov.au/business-government/asds-cyber-security-frameworks/ism/cyber-security-guidelines/guidelines-for-system-hardening) calls out the value of centrally logging command-line process creation events and PowerShell events. The Essential Eight mapping also links controls such as PowerShell logging and command-line process creation logging to maturity expectations.
+
+That is not paperwork trivia. It is useful telemetry.
+
+If an attacker lands on a Windows host and starts living off the land, process creation and PowerShell visibility can be the difference between "we have useful incident evidence" and "we think something happened on a Tuesday".
+
+Start with the basics. Check whether process creation auditing is enabled:
+
+```powershell
+auditpol /get /subcategory:"Process Creation"
+```
+
+Check whether command-line arguments are included in process creation events:
+
+```powershell
+Get-ItemProperty `
+  -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System\Audit\ProcessCreation" `
+  -Name "IncludeCmdLine_Enabled"
+```
+
+That setting adds command-line details to Security Event ID 4688 when process creation auditing is enabled. It is useful for detection and investigation, but it is not free of risk. Microsoft notes that command-line arguments can contain sensitive data such as passwords or user data, so access to the Security log and downstream log platforms needs to be controlled properly. More visibility also means more responsibility. Funny how that keeps happening.
+
+Then check PowerShell script block logging:
+
+```powershell
+Get-ItemProperty `
+  -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging" `
+  -Name "EnableScriptBlockLogging"
+```
+
+These checks are not glamorous. They are not a silver bullet. They will not magically make ransomware pack up and pursue a career in accounting. But they are practical, verifiable, and immediately useful.
+
+Better still, they give sysadmins a way to show progress:
+
+- here is the setting
+- here is the evidence
+- here is the fleet coverage
+- here is what still needs remediation
+- here is the risk if we leave it alone
+
+That is a much healthier conversation than "the spreadsheet says red".
+
+## Compliance should help, not heckle
+
+Security and compliance teams have an important job. So do infrastructure teams. The problem starts when compliance becomes a ticket factory and technical teams are treated like the magic button that makes audit findings disappear.
+
+Good Essential Eight uplift needs both sides:
+
+- compliance defines obligations, evidence needs, and reporting expectations
+- security translates threat and control intent into defensible priorities
+- sysadmins validate what is real, what is deployable, and what will break if rushed
+- leadership makes risk decisions instead of outsourcing them to whoever owns Group Policy this week
+
+When that collaboration works, the framework becomes useful. When it does not, everyone argues about maturity levels while the environment quietly remains vulnerable.
+
+The goal is not to make auditors happy for a week. The goal is to reduce the odds of compromise, improve detection, and make recovery less chaotic when something inevitably goes sideways.
+
+## What we are building
+
+This is why the MadDogWarner crew are working on a PowerShell-based security compliance audit tool focused on sysadmins.
+
+The aim is simple: bring Essential Eight and related Windows security checks closer to the people who actually operate the environment. Not as another bloated governance platform. A practical tool that can inspect real settings, produce readable evidence, and help teams find the next useful improvement.
+
+The first focus is private testing, not a public release date. We want checks that are technically accurate, explain what they mean, and help teams move without drowning them in control language.
+
+The tool should help answer questions like:
+
+- Can we prove this setting is enabled?
+- Which machines are missing it?
+- Is this a quick fix or a risky change?
+- Which gaps matter most for our threat profile?
+- What evidence can we hand to security and compliance without spending half a day formatting screenshots?
+
+Essential Eight uplift should not feel like being yelled at by a spreadsheet. It should feel like controlled, visible, risk-driven progress.
+
+That is the bar.
+
+I might be biased, but sysadmins build the systems, manage the systems, get told to put in the security controls, fix the systems again after the controls go in, and then get asked to rebuild the whole thing if it gets hacked anyway.
+
+Your favourite disgruntled sudoer signing off.
+
+- MadDogWarner :D

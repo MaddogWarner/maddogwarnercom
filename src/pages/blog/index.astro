@@ -1,0 +1,110 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import BlogCard from '../../components/BlogCard.astro';
+
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .map((post) => ({
+    title: post.data.title,
+    date: post.data.date,
+    tags: post.data.tags,
+    excerpt: post.data.description,
+    slug: post.slug,
+  }));
+
+const tags = [...new Set(posts.flatMap((post) => post.tags))].sort();
+---
+
+<BaseLayout title="Blog" description="MadDogWarner blog posts.">
+  <section class="section">
+    <div class="container">
+      <SectionHeader eyebrow="// blog.posts" title="Blog" />
+      <details class="filters surface-card">
+        <summary class="mono">Filter tags</summary>
+        <div class="filter-actions">
+          <button type="button" class="active" data-tag-filter="all">all</button>
+          {tags.map((tag) => <button type="button" data-tag-filter={tag}>#{tag}</button>)}
+        </div>
+      </details>
+      <div class="grid">
+        {posts.map((post) => (
+          <div class="post-shell" data-post-tags={post.tags.join(',')}>
+            <BlogCard post={post} />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  <script>
+    const filterButtons = document.querySelectorAll('[data-tag-filter]');
+    const postShells = document.querySelectorAll('[data-post-tags]');
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const selected = button.getAttribute('data-tag-filter');
+        filterButtons.forEach((item) => item.classList.toggle('active', item === button));
+        postShells.forEach((post) => {
+          const tags = post.getAttribute('data-post-tags')?.split(',') ?? [];
+          post.classList.toggle('hidden', selected !== 'all' && !tags.includes(String(selected)));
+        });
+      });
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  .filters {
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+  }
+
+  summary {
+    cursor: pointer;
+    color: var(--color-accent);
+  }
+
+  .filter-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+  }
+
+  .filter-actions button {
+    border: 1px solid rgba(0, 180, 255, 0.34);
+    border-radius: 999px;
+    background: rgba(0, 180, 255, 0.06);
+    color: var(--color-muted);
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.82rem;
+    padding: 0.34rem 0.7rem;
+  }
+
+  .filter-actions button:hover,
+  .filter-actions button:focus-visible,
+  .filter-actions button.active {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: 0 0 18px var(--color-glow);
+  }
+
+  .post-shell.hidden {
+    display: none;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 760px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

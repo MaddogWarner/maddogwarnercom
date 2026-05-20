@@ -1,0 +1,46 @@
+---
+interface Props {
+  tag: string;
+}
+
+const { tag } = Astro.props;
+const key = tag.toLowerCase();
+const variant =
+  ['security', 'cybersecurity', 'threat', 'siem', 'pentest'].some((item) => key.includes(item))
+    ? 'security'
+    : ['homelab', 'infra', 'network', 'netops'].some((item) => key.includes(item))
+      ? 'homelab'
+      : ['dev', 'code', 'automation', 'python', 'go'].some((item) => key.includes(item))
+        ? 'dev'
+        : 'default';
+---
+
+<span class:list={['tag-badge', variant]}>#{tag}</span>
+
+<style>
+  .tag-badge {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(0, 180, 255, 0.34);
+    border-radius: 999px;
+    background: rgba(0, 180, 255, 0.06);
+    padding: 0.22rem 0.55rem;
+    color: var(--color-accent);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.74rem;
+    line-height: 1.2;
+  }
+
+  .homelab {
+    border-color: rgba(0, 255, 136, 0.35);
+    background: rgba(0, 255, 136, 0.06);
+    color: var(--color-terminal);
+  }
+
+  .dev {
+    border-color: rgba(168, 85, 247, 0.38);
+    background: rgba(168, 85, 247, 0.08);
+    color: #c79bff;
+  }
+</style>
+

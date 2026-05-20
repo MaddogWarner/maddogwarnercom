@@ -1,0 +1,176 @@
+---
+import { GitBranch, Lock, Menu, X } from '@lucide/astro';
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/about/', label: 'About' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/blog/', label: 'Blog' },
+];
+
+const current = Astro.url.pathname;
+const isActive = (href: string) => href === '/' ? current === '/' : current.startsWith(href);
+---
+
+<header class="site-header">
+  <nav class="nav container" aria-label="Primary navigation">
+    <a class="brand" href="/">
+      <Lock size={18} aria-hidden="true" />
+      <span>MadDogWarner</span>
+    </a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-button>
+      <Menu class="open-icon" size={24} aria-hidden="true" />
+      <X class="close-icon" size={24} aria-hidden="true" />
+      <span class="sr-only">Toggle menu</span>
+    </button>
+    <div class="links" data-menu id="mobile-menu">
+      {links.map((link) => (
+        <a class:list={[isActive(link.href) && 'active']} href={link.href}>{link.label}</a>
+      ))}
+      <a class="github-link" href="https://github.com/MadDogWarner" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <GitBranch size={19} aria-hidden="true" />
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const button = document.querySelector('[data-menu-button]');
+  const menu = document.querySelector('[data-menu]');
+
+  button?.addEventListener('click', () => {
+    const expanded = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!expanded));
+    menu?.classList.toggle('open', !expanded);
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(26, 26, 62, 0.75);
+    background: rgba(5, 5, 8, 0.78);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav {
+    display: flex;
+    min-height: 4.25rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .brand,
+  .links,
+  .links a {
+    display: flex;
+    align-items: center;
+  }
+
+  .brand {
+    gap: 0.55rem;
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  .brand svg {
+    color: var(--color-accent);
+  }
+
+  .links {
+    gap: 1.25rem;
+  }
+
+  .links a {
+    position: relative;
+    min-height: 2.5rem;
+    color: var(--color-muted);
+    font-size: 0.94rem;
+    font-weight: 700;
+  }
+
+  .links a:hover,
+  .links a.active {
+    color: var(--color-accent);
+  }
+
+  .links a.active::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0.3rem;
+    left: 0;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  .github-link {
+    color: var(--color-accent) !important;
+  }
+
+  .menu-button {
+    display: none;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: rgba(13, 13, 26, 0.85);
+    color: var(--color-accent);
+    padding: 0.55rem;
+  }
+
+  .close-icon {
+    display: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 760px) {
+    .menu-button {
+      display: inline-grid;
+      place-items: center;
+    }
+
+    .menu-button[aria-expanded="true"] .open-icon {
+      display: none;
+    }
+
+    .menu-button[aria-expanded="true"] .close-icon {
+      display: block;
+    }
+
+    .links {
+      position: fixed;
+      inset: 4.25rem 0 auto;
+      display: none;
+      min-height: calc(100vh - 4.25rem);
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 0;
+      border-top: 1px solid var(--color-border);
+      background: rgba(5, 5, 8, 0.97);
+      padding: 1.25rem;
+    }
+
+    .links.open {
+      display: flex;
+    }
+
+    .links a {
+      min-height: 3.5rem;
+      justify-content: center;
+      font-size: 1.08rem;
+    }
+  }
+</style>

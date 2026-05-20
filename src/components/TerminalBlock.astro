@@ -1,0 +1,109 @@
+---
+interface Props {
+  lines: string[];
+  typing?: boolean;
+}
+
+const { lines, typing = false } = Astro.props;
+---
+
+<div class:list={['terminal-block', typing && 'typing']}>
+  <div class="chrome" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <pre>{lines.map((line) => <span>{line}</span>)}</pre>
+</div>
+
+<style>
+  .terminal-block {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: rgba(3, 4, 7, 0.92);
+    box-shadow: 0 0 24px rgba(0, 180, 255, 0.08);
+  }
+
+  .terminal-block::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.026) 0,
+      rgba(255, 255, 255, 0.026) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  }
+
+  .chrome {
+    display: flex;
+    gap: 0.45rem;
+    border-bottom: 1px solid rgba(26, 26, 62, 0.8);
+    padding: 0.78rem 0.9rem;
+  }
+
+  .chrome span {
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 50%;
+    background: #6b7a99;
+    opacity: 0.8;
+  }
+
+  .chrome span:first-child {
+    background: #ff5f56;
+  }
+
+  .chrome span:nth-child(2) {
+    background: #ffbd2e;
+  }
+
+  .chrome span:nth-child(3) {
+    background: #27c93f;
+  }
+
+  pre {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 1.25rem;
+    color: var(--color-terminal);
+    font-family: "JetBrains Mono", monospace;
+    font-size: clamp(0.82rem, 2vw, 0.95rem);
+    line-height: 1.8;
+    white-space: pre-wrap;
+  }
+
+  pre span {
+    display: block;
+  }
+
+  .typing pre span {
+    animation: reveal-line 260ms ease forwards;
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+
+  .typing pre span:nth-child(1) { animation-delay: 80ms; }
+  .typing pre span:nth-child(2) { animation-delay: 220ms; }
+  .typing pre span:nth-child(3) { animation-delay: 360ms; }
+  .typing pre span:nth-child(4) { animation-delay: 500ms; }
+  .typing pre span:nth-child(5) { animation-delay: 640ms; }
+  .typing pre span:nth-child(6) { animation-delay: 780ms; }
+  .typing pre span:nth-child(7) { animation-delay: 920ms; }
+  .typing pre span:nth-child(8) { animation-delay: 1060ms; }
+  .typing pre span:nth-child(9) { animation-delay: 1200ms; }
+  .typing pre span:nth-child(10) { animation-delay: 1340ms; }
+
+  @keyframes reveal-line {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

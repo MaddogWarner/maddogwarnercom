@@ -1,0 +1,40 @@
+---
+interface Props {
+  eyebrow: string;
+  title?: string;
+  text?: string;
+}
+
+const { eyebrow, title, text } = Astro.props;
+---
+
+<header class="section-header">
+  <p class="mono terminal">{eyebrow}</p>
+  {title && <h2>{title}</h2>}
+  {text && <p class="text-muted">{text}</p>}
+</header>
+
+<style>
+  .section-header {
+    margin-bottom: 1.8rem;
+  }
+
+  .section-header p {
+    margin: 0;
+  }
+
+  .section-header h2 {
+    margin: 0.25rem 0 0;
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: 0;
+    line-height: 1.05;
+  }
+
+  .section-header > .text-muted {
+    margin-top: 0.75rem;
+    max-width: 62ch;
+  }
+</style>
+

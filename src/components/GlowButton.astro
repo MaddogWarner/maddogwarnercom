@@ -1,0 +1,62 @@
+---
+import { ExternalLink } from '@lucide/astro';
+
+interface Props {
+  href: string;
+  variant?: 'outline' | 'filled';
+  external?: boolean;
+}
+
+const { href, variant = 'outline', external = false } = Astro.props;
+const rel = external ? 'noopener noreferrer' : undefined;
+const target = external ? '_blank' : undefined;
+---
+
+<a class:list={['glow-button', variant]} href={href} target={target} rel={rel}>
+  <slot />
+  {external && <ExternalLink size={16} aria-hidden="true" />}
+</a>
+
+<style>
+  .glow-button {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border: 1px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 0.72rem 1rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.88rem;
+    font-weight: 700;
+    transition: background 180ms ease, box-shadow 180ms ease, color 180ms ease, transform 180ms ease;
+  }
+
+  .glow-button:hover,
+  .glow-button:focus-visible {
+    box-shadow: 0 0 24px var(--color-glow);
+    transform: translateY(-1px);
+  }
+
+  .outline {
+    background: rgba(5, 5, 8, 0.35);
+    color: var(--color-accent);
+  }
+
+  .outline:hover,
+  .outline:focus-visible {
+    background: rgba(0, 180, 255, 0.08);
+  }
+
+  .filled {
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  .filled:hover,
+  .filled:focus-visible {
+    background: #38c6ff;
+  }
+</style>
+

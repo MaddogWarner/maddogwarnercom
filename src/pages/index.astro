@@ -1,0 +1,139 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import TerminalBlock from '../components/TerminalBlock.astro';
+
+type Repo = {
+  name: string;
+  description?: string;
+  language?: string;
+  stars?: number;
+  url: string;
+  topics?: string[];
+  updatedAt?: string;
+};
+
+const posts = (await getCollection('blog')).filter((post) => !post.data.draft);
+const projects = await getCollection('projects');
+let featuredProjects: Repo[] = [];
+
+try {
+  const res = await fetch('https://api.github.com/users/MadDogWarner/repos?sort=updated&per_page=10');
+  if (res.ok) {
+    const data = await res.json();
+    featuredProjects = data
+      .filter((repo: any) => !repo.fork)
+      .sort((a: any, b: any) => new Date(b.updated_at).valueOf() - new Date(a.updated_at).valueOf())
+      .slice(0, 3)
+      .map((repo: any) => ({
+        name: repo.name,
+        description: repo.description,
+        language: repo.language,
+        stars: repo.stargazers_count,
+        url: repo.html_url,
+        topics: repo.topics ?? [],
+        updatedAt: repo.updated_at,
+      }));
+  }
+} catch {
+  featuredProjects = [];
+}
+
+if (!featuredProjects.length) {
+  featuredProjects = projects.filter((project) => project.data.featured).slice(0, 3).map((project) => ({
+    name: project.data.name,
+    description: project.data.description,
+    language: project.data.language,
+    stars: project.data.stars,
+    url: project.data.url,
+    topics: project.data.tags,
+  }));
+}
+
+const latestPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3).map((post) => ({
+  title: post.data.title,
+  date: post.data.date,
+  tags: post.data.tags,
+  excerpt: post.data.description,
+  slug: post.slug,
+}));
+---
+
+<BaseLayout>
+  <Hero />
+
+  <section class="section">
+    <div class="container">
+      <SectionHeader eyebrow="// recent.projects" title="Recent Projects" />
+      <div class="grid cards">
+        {featuredProjects.map((repo) => <ProjectCard repo={repo} />)}
+      </div>
+      <a class="more mono" href="/projects/">View all projects -&gt;</a>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <SectionHeader eyebrow="// latest.posts" title="Latest Posts" />
+      <div class="grid posts">
+        {latestPosts.map((post) => <BlogCard post={post} />)}
+      </div>
+      <a class="more mono" href="/blog/">Read the blog -&gt;</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container terminal-wrap">
+      <TerminalBlock lines={[
+        '> whoami',
+        'MadDogWarner',
+        '> cat /etc/team',
+        'Claude   [architect]',
+        'Codex    [developer]',
+        '> uptime',
+        'always scanning',
+      ]} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .posts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .alt {
+    background: rgba(13, 13, 26, 0.36);
+  }
+
+  .more {
+    display: inline-flex;
+    margin-top: 1.25rem;
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .terminal-wrap {
+    max-width: 760px;
+  }
+
+  @media (max-width: 860px) {
+    .cards,
+    .posts {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+import { Star } from '@lucide/astro';
+import TagBadge from './TagBadge.astro';
+
+interface Repo {
+  name: string;
+  description?: string;
+  language?: string;
+  stars?: number;
+  url: string;
+  topics?: string[];
+  updatedAt?: string;
+}
+
+const { repo } = Astro.props as { repo: Repo };
+---
+
+<a class="project-card surface-card" href={repo.url} target="_blank" rel="noopener noreferrer">
+  <div>
+    <p class="mono accent name">{repo.name}</p>
+    <p class="description">{repo.description || 'No description provided yet.'}</p>
+  </div>
+  <div class="meta">
+    {repo.language && <span class="language">{repo.language}</span>}
+    <span><Star size={14} aria-hidden="true" /> {repo.stars ?? 0}</span>
+  </div>
+  {repo.topics?.length ? (
+    <div class="tags">
+      {repo.topics.slice(0, 4).map((tag) => <TagBadge tag={tag} />)}
+    </div>
+  ) : null}
+</a>
+
+<style>
+  .project-card {
+    display: flex;
+    min-height: 15rem;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.1rem;
+    padding: 1.25rem;
+  }
+
+  .name {
+    margin: 0 0 0.7rem;
+    font-weight: 800;
+  }
+
+  .description {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .meta,
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .meta {
+    color: var(--color-muted);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.82rem;
+  }
+
+  .meta span {
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .language {
+    color: var(--color-terminal);
+  }
+</style>
+

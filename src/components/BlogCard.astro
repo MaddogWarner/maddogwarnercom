@@ -1,0 +1,59 @@
+---
+import TagBadge from './TagBadge.astro';
+
+interface Post {
+  title: string;
+  date: Date;
+  tags: string[];
+  excerpt: string;
+  slug: string;
+}
+
+const { post } = Astro.props as { post: Post };
+---
+
+<a class="blog-card surface-card" href={`/blog/${post.slug}/`}>
+  <p class="date mono">{post.date.toLocaleDateString('en-AU', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+  <h3>{post.title}</h3>
+  <p class="excerpt">{post.excerpt}</p>
+  <div class="tags">
+    {post.tags.map((tag) => <TagBadge tag={tag} />)}
+  </div>
+</a>
+
+<style>
+  .blog-card {
+    display: block;
+    padding: 1.25rem;
+  }
+
+  .date {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.78rem;
+  }
+
+  h3 {
+    margin: 0.4rem 0 0.7rem;
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.35rem;
+    line-height: 1.15;
+  }
+
+  .blog-card:hover h3 {
+    color: var(--color-accent);
+  }
+
+  .excerpt {
+    margin: 0 0 1rem;
+    color: var(--color-muted);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+</style>
+
