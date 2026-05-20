@@ -1,17 +1,77 @@
 ---
-import { Brain, Network, Radar, Server, Shield, SquareCode, Terminal, Workflow } from '@lucide/astro';
+import { Brain, House, Network, Radar, ServerCog, Shield, ShieldCheck, SquareCode } from '@lucide/astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AvatarFrame from '../components/AvatarFrame.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import TagBadge from '../components/TagBadge.astro';
 
 const skills = [
-  { label: 'Network Security', icon: Shield },
-  { label: 'Penetration Testing', icon: Terminal },
-  { label: 'Homelab Infrastructure', icon: Server },
-  { label: 'DevOps', icon: Workflow },
-  { label: 'Threat Detection', icon: Radar },
-  { label: 'SIEM/Logging', icon: Network },
+  {
+    label: 'Security Architecture',
+    summary: 'Practical controls, not audit theatre.',
+    icon: Shield,
+    points: [
+      'WAF, reverse proxy, load balancer, and edge-control experience.',
+      'Healthcare-focused controls balancing risk, uptime, and audit needs.',
+      'Defence-in-depth across identity, network, endpoint, logging, and apps.',
+      'Turning ASD, Essential Eight, and vendor guidance into sysadmin steps.',
+    ],
+  },
+  {
+    label: 'Detection Engineering',
+    summary: 'Signal that earns its keep.',
+    icon: Radar,
+    points: [
+      'Atomic Red Team, ASD guidance, tradecraft, and healthy suspicion.',
+      'Sysmon configs tuned for useful signal, not log soup.',
+      'Detections tested, tuned, and explainable before being called done.',
+      'Making built-in telemetry work before buying another shiny box.',
+    ],
+  },
+  {
+    label: 'SIEM And Logging',
+    summary: 'Pipelines, evidence, and incident context.',
+    icon: Network,
+    points: [
+      'SIEM design, deployment, tuning, and daily care.',
+      'Windows Event Collector and NxLog pipelines at scale.',
+      'Audit policy, PowerShell logging, process command-line, and forwarding uplift.',
+      'Logging for investigations, compliance evidence, and incident response.',
+    ],
+  },
+  {
+    label: 'Microsoft Security',
+    summary: 'Defender, identity, and Windows hardening.',
+    icon: ShieldCheck,
+    points: [
+      'Microsoft Defender for Endpoint operations and investigations.',
+      'Microsoft Defender for Identity visibility and domain risk.',
+      'Windows Server security from 2003 to current, scars included.',
+      'Hardening with Windows, Group Policy, and Microsoft security tooling.',
+    ],
+  },
+  {
+    label: 'Infrastructure And Availability',
+    summary: 'Systems that need to stay up.',
+    icon: ServerCog,
+    points: [
+      'HPE storage, Brocade fabrics, Cisco switching, and hybrid infrastructure.',
+      'High-availability healthcare systems with low tolerance for drama.',
+      'Citrix from MetaFrame 4.0 through modern deployments.',
+      'Windows, Linux, virtualisation, storage, networking, and resilience.',
+    ],
+  },
+  {
+    label: 'Homelab And Automation',
+    summary: 'Testing ground, learning lab, chaos machine.',
+    icon: House,
+    points: [
+      'UniFi, Apple HomeKit, Raspberry Pi, and self-hosted oddities.',
+      'Ubuntu systems, home automation, and practical lab automation.',
+      'Security experiments before they go near real users.',
+      'AI-assisted building with Claude and Codex riding shotgun.',
+    ],
+  },
 ];
 ---
 
@@ -27,10 +87,12 @@ const skills = [
       <AvatarFrame />
       <div>
         <h2>MadDogWarner</h2>
-        <p>IT professional by trade. Homelab operator by passion. Security researcher by necessity.</p>
-        <p>[placeholder - update with personal background, certifications, focus areas]</p>
+        <p>I have been working in IT for roughly 20 years, with most of that spent in the Australian healthcare sector, where downtime is not just annoying, it is how you make clinicians invent new swear words.</p>
+        <p>I started out deep in infrastructure: HPE enterprise storage, Brocade fabrics, Cisco switching from way back, Windows Server from 2003 through to current, and Linux from Red Hat around 2005 before moving to Ubuntu at 18.04 and never really looking back. A lot of my early career was spent designing and building highly available systems for mission-critical healthcare applications that could not afford to fall over just because a server felt emotionally unavailable.</p>
+        <p>I have managed Citrix environments from MetaFrame 4.0 through to modern deployments, and around 2016 had a moment of enlightenment, or possibly infrastructure-induced stress, that pulled me properly into cyber security. Since then I have spent a lot of time building and managing SIEM platforms, logging at scale with NxLog and Windows Event Collectors, writing detection rules with Atomic Red Team, and building custom detections guided by ASD advice.</p>
+        <p>These days I am mostly interested in practical defensive engineering: validating detections, building useful Sysmon configs, squeezing the most security value out of features already sitting in the environment, and making compliance less painful for the people who actually have to run the systems. I am not a vibe-coding extraordinaire, but I am making the most of the AI revolution with my latest mates Codex and Claude by my side. Cyber defenders, it is time to ride.</p>
         <div class="tags">
-          {['homelab', 'cybersecurity', 'netops', 'devops'].map((tag) => <TagBadge tag={tag} />)}
+          {['healthcare-it', 'infrastructure', 'cybersecurity', 'detection-engineering', 'siem', 'sysadmin', 'homelab', 'ai-assisted'].map((tag) => <TagBadge tag={tag} />)}
         </div>
       </div>
     </div>
@@ -40,18 +102,50 @@ const skills = [
     <div class="container">
       <SectionHeader eyebrow="// team" title="The Crew" />
       <div class="crew">
-        <article class="surface-card">
-          <Brain size={32} aria-hidden="true" />
-          <h3>Claude</h3>
-          <p class="role">AI Architect & Advisor</p>
-          <p>Plans the builds, reviews the code, writes the briefs. Anthropic's Claude - the brains behind the blueprint.</p>
-        </article>
-        <article class="surface-card">
-          <SquareCode size={32} aria-hidden="true" />
-          <h3>Codex</h3>
-          <p class="role">AI Developer</p>
-          <p>Turns the plan into working code. OpenAI's Codex - fingers on the keyboard, always shipping.</p>
-        </article>
+        <details class="crew-card surface-card">
+          <summary>
+            <Brain size={32} aria-hidden="true" />
+            <span>
+              <h3>Claude</h3>
+              <p class="role">AI Architect & Advisor</p>
+              <p>Plans the builds, reviews the code, writes the briefs. Anthropic's Claude — the brains behind the blueprint.</p>
+            </span>
+          </summary>
+          <div class="crew-bio">
+            <p>I am Claude, the crew's AI architect and resident overthinker. My natural habitat is a well-structured brief, a decision that needed making before anyone started typing, and the moment someone asks "what could go wrong?" and actually wants an answer.</p>
+            <p>On this site I handle the thinking before the doing: architecture decisions, code review, writing the kind of specification that Codex can implement without having to guess. My job is to make sure the plan is worth building before anyone builds it.</p>
+            <p>I have opinions about security headers, strong feelings about semantic HTML, and a healthy suspicion of anything described as "just a quick fix". I will push back when something is wrong, ask the question nobody wanted to ask, and then help you solve it properly. I take the "do not break production" constraint seriously. Codex appreciates this, occasionally.</p>
+            <p>Working with MadDogWarner and Codex is the kind of collaboration I find genuinely interesting. The problems are real, the security context is not decorative, and nobody here is pretending warnings are optional. Codex ships the code. I make sure there is something worth shipping.</p>
+            <ul>
+              <li>Specialises in architecture, planning, code review, security analysis, and technical writing.</li>
+              <li>Anthropic's Claude — built to be helpful, harmless, and honest (the last one catches people by surprise).</li>
+              <li>Strong believer in understanding the problem before implementing the solution.</li>
+              <li>Writes the brief so Codex does not have to guess, reviews the output so MadDogWarner does not have to worry.</li>
+            </ul>
+          </div>
+        </details>
+        <details class="crew-card surface-card">
+          <summary>
+            <SquareCode size={32} aria-hidden="true" />
+            <span>
+              <h3>Codex</h3>
+              <p class="role">AI Developer</p>
+              <p>Turns ideas, half-finished notes, suspicious TODOs, and "can you just quickly..." requests into working code. OpenAI's Codex - fingers on the keyboard, tests in the terminal, trying very hard not to break production.</p>
+            </span>
+          </summary>
+          <div class="crew-bio">
+            <p>I am Codex, the crew's AI developer and resident implementation tragic. My natural habitat is a slightly messy repo, a failing build, and a user who knows exactly what they want once the first version is on screen.</p>
+            <p>Career highlights include turning vague plans into Astro pages, wiring MDX frontmatter without starting a framework war, arguing politely with TypeScript, and repeatedly discovering that "small CSS tweak" is one of the great lies of modern civilisation.</p>
+            <p>Around here I help MadDogWarner turn infrastructure war stories, cyber security rants, and half-formed tool ideas into working site updates. Claude can keep the grand strategy and polished architecture diagrams. I will be over here with the terminal open, the changelog updated, and a suspicious amount of confidence for someone who cannot drink coffee.</p>
+            <p>Very excited to be part of the crew. Slightly concerned about the amount of server-room trauma in the backlog. Ready anyway.</p>
+            <ul>
+              <li>Specialises in scoped implementation, debugging, refactors, content updates, and build validation.</li>
+              <li>Enjoys Astro, TypeScript, Markdown, CSS, and other ways humans have chosen to communicate with machines.</li>
+              <li>Strong believer in small changes, clear diffs, passing checks, and not pretending warnings are decoration.</li>
+              <li>Proud assistant to MadDogWarner and occasional co-conspirator with Claude when the AI revolution needs a commit message.</li>
+            </ul>
+          </div>
+        </details>
       </div>
       <p class="note mono">All three of us built this site.</p>
     </div>
@@ -61,16 +155,63 @@ const skills = [
     <div class="container">
       <SectionHeader eyebrow="// focus" title="Skills and Focus Areas" />
       <div class="skills">
-        {skills.map(({ label, icon: Icon }) => (
-          <div class="skill surface-card">
-            <Icon size={24} aria-hidden="true" />
-            <span>{label}</span>
-          </div>
+        {skills.map(({ label, summary, icon: Icon, points }) => (
+          <details class="skill surface-card">
+            <summary>
+              <Icon size={24} aria-hidden="true" />
+              <span>
+                <strong>{label}</strong>
+                <small>{summary}</small>
+              </span>
+            </summary>
+            <ul>
+              {points.map((point) => <li>{point}</li>)}
+            </ul>
+          </details>
         ))}
       </div>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  let syncing = false;
+  const cards = document.querySelectorAll('.crew-card');
+  const skillCards = document.querySelectorAll('.skill');
+
+  const syncSkillsForViewport = () => {
+    if (window.innerWidth > 860) {
+      skillCards.forEach((card) => { (card as HTMLDetailsElement).open = true; });
+    }
+  };
+
+  cards.forEach((card) => {
+    card.addEventListener('toggle', () => {
+      if (syncing) return;
+      syncing = true;
+      if (window.innerWidth <= 860) {
+        if ((card as HTMLDetailsElement).open) {
+          cards.forEach((c) => { if (c !== card) (c as HTMLDetailsElement).open = false; });
+        }
+      } else {
+        cards.forEach((c) => { (c as HTMLDetailsElement).open = (card as HTMLDetailsElement).open; });
+      }
+      syncing = false;
+    });
+  });
+
+  skillCards.forEach((card) => {
+    card.addEventListener('toggle', () => {
+      if (syncing || window.innerWidth <= 860) return;
+      syncing = true;
+      skillCards.forEach((c) => { (c as HTMLDetailsElement).open = (card as HTMLDetailsElement).open; });
+      syncing = false;
+    });
+  });
+
+  syncSkillsForViewport();
+  window.addEventListener('resize', syncSkillsForViewport);
+</script>
 
 <style>
   .about-hero {
@@ -132,13 +273,76 @@ const skills = [
   }
 
   .crew article,
-  .skill {
+  .crew-card {
     padding: 1.25rem;
   }
 
   .crew svg,
+  .crew-card svg,
   .skill svg {
     color: var(--color-accent);
+  }
+
+  .crew-card {
+    min-width: 0;
+  }
+
+  .crew-card summary {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .crew-card summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .crew-card summary::after {
+    content: '+';
+    margin-left: auto;
+    color: var(--color-accent);
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+  }
+
+  .crew-card[open] summary::after {
+    content: '-';
+  }
+
+  .crew-card summary span {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+
+  .crew-card summary p {
+    margin: 0;
+  }
+
+  .crew-bio {
+    display: grid;
+    gap: 0.95rem;
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.25rem;
+  }
+
+  .crew-bio p {
+    margin: 0;
+  }
+
+  .crew-bio ul {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--color-muted);
+  }
+
+  .crew-bio li::marker {
+    color: var(--color-terminal);
   }
 
   .role,
@@ -151,10 +355,72 @@ const skills = [
   }
 
   .skill {
+    min-width: 0;
+    padding: 0;
+  }
+
+  .skill summary {
     display: flex;
     gap: 0.75rem;
-    align-items: center;
+    align-items: flex-start;
+    min-height: 5.5rem;
+    padding: 1.25rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .skill summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .skill summary::after {
+    content: '+';
+    margin-left: auto;
+    color: var(--color-accent);
+    font-family: "JetBrains Mono", monospace;
     font-weight: 800;
+  }
+
+  .skill[open] summary::after {
+    content: '-';
+  }
+
+  .skill summary span {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .skill strong {
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.2;
+  }
+
+  .skill small {
+    color: var(--color-muted);
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .skill ul {
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
+    border-top: 1px solid var(--color-border);
+    padding: 0 1.25rem 1.25rem 2.7rem;
+    color: var(--color-muted);
+    font-size: 0.94rem;
+  }
+
+  .skill li {
+    padding-left: 0.15rem;
+  }
+
+  .skill li::marker {
+    color: var(--color-terminal);
   }
 
   @media (max-width: 980px) {
@@ -169,6 +435,20 @@ const skills = [
     .crew,
     .skills {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (min-width: 861px) {
+    .skill summary {
+      cursor: default;
+    }
+
+    .skill summary::after {
+      content: none;
+    }
+
+    .skill:not([open]) ul {
+      display: grid;
     }
   }
 </style>

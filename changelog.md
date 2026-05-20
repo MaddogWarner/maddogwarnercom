@@ -8,6 +8,7 @@ This project follows a simple changelog format. Add new entries at the top under
 
 ### Added
 
+- Added a generated server-zap article image for the Hello World launch post.
 - Added complete Open Graph, canonical URL, favicon, and Twitter card metadata.
 - Added a static SVG favicon.
 - Added the "Essential Eight Needs Better Sysadmin Tooling" blog post with ASD/Microsoft references, PowerShell audit examples, and a generated article image.
@@ -23,6 +24,11 @@ This project follows a simple changelog format. Add new entries at the top under
 
 ### Changed
 
+- Turned the Codex crew card into an expandable bio with a self-aware implementation-focused write-up.
+- Updated About page Skills and Focus Areas behaviour so skill cards auto-expand together on desktop while preserving mobile tap interaction.
+- Tuned the About skills cards so desktop shows focus details by default while mobile keeps tap-to-expand behaviour.
+- Expanded the About page skills section into native accordion cards with practical focus-area bullet points.
+- Refreshed the About page bio and profile tags with a more informal healthcare infrastructure and cyber security focus.
 - Made the Blog tag filter interactive with vanilla JavaScript.
 - Corrected the site launch post date to `2026-05-20`.
 - Fixed blog post reading time calculation to use raw MDX body content.
