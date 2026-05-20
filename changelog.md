@@ -8,6 +8,8 @@ This project follows a simple changelog format. Add new entries at the top under
 
 ### Added
 
+- Added Astro sitemap generation via `@astrojs/sitemap`.
+- Added `robots.txt` with a sitemap reference for search crawlers.
 - Added a generated server-zap article image for the Hello World launch post.
 - Added complete Open Graph, canonical URL, favicon, and Twitter card metadata.
 - Added a static SVG favicon.
