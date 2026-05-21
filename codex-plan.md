@@ -398,6 +398,19 @@ export default defineConfig({
 
 Generate the following images in the same aesthetic as `maddog.png` — dark background, electric blue (`#00b4ff`) as the hero colour, high-detail digital illustration style.
 
+### Image generation status
+
+- [ ] `public/images/hero-bg.png` — pending original background asset.
+- [ ] `public/images/about-bg.png` — pending original background asset.
+- [ ] `public/images/blog-placeholder.png` — pending original fallback thumbnail asset.
+- [ ] `public/images/og-default.png` — pending original Open Graph asset.
+- [x] `public/images/hello-world-server-zap.png` — generated article image for the Hello World launch post.
+- [x] `public/images/essential-eight-sysadmin-audit-tool.png` — generated article image for the Essential Eight post.
+- [x] `public/images/essential-eight-uplift-ios-icon-1024.png` — generated iOS icon concept asset.
+- [x] `public/images/essential-eight-uplift-ios-icon-concept.png` — generated iOS icon concept asset.
+- [x] `public/images/blog-hero.png` — generated Blog page hero image.
+- [x] `public/images/projects-hero.png` — generated Projects page hero image.
+
 ### `public/images/hero-bg.png` (1920×1080)
 Dark background. Abstract cyber-grid or PCB circuit board pattern in very deep navy (#0d0d1a). Faint blue trace lines and node dots. Subtle depth — slightly brighter toward centre. NOT busy — this sits behind text so must be subtle. No characters, no faces.
 

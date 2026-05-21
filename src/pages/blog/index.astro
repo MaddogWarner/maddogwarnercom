@@ -21,7 +21,24 @@ const tags = [...new Set(posts.flatMap((post) => post.tags))].sort();
 <BaseLayout title="Blog" description="MadDogWarner blog posts.">
   <section class="section">
     <div class="container">
-      <SectionHeader eyebrow="// blog.posts" title="Blog" />
+      <div class="blog-hero">
+        <SectionHeader eyebrow="// blog.posts" title="Blog" />
+        <figure class="hero-art" aria-label="MadDogWarner avatar at a terminal">
+          <img
+            src="/images/blog-hero.png"
+            alt="MadDogWarner hacker avatar looking back from a terminal workstation"
+            loading="eager"
+            decoding="async"
+          />
+          <figcaption
+            class="mono terminal-command"
+            aria-label="Terminal command: >sudo blogs.sh"
+            data-command=">sudo blogs.sh"
+          >
+            &gt;sudo blogs.sh
+          </figcaption>
+        </figure>
+      </div>
       <details class="filters surface-card">
         <summary class="mono">Filter tags</summary>
         <div class="filter-actions">
@@ -52,10 +69,108 @@ const tags = [...new Set(posts.flatMap((post) => post.tags))].sort();
         });
       });
     });
+
+    const heroImage = document.querySelector<HTMLImageElement>('.hero-art img');
+    const terminalCommand = document.querySelector<HTMLElement>('[data-command]');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let hasTypedCommand = false;
+
+    const typeTerminalCommand = () => {
+      if (!terminalCommand || hasTypedCommand) return;
+
+      hasTypedCommand = true;
+      const command = terminalCommand.dataset.command ?? '>sudo blogs.sh';
+
+      if (prefersReducedMotion || command.length <= 1) {
+        terminalCommand.textContent = command;
+        return;
+      }
+
+      terminalCommand.textContent = command[0] ?? '';
+
+      [...command.slice(1)].forEach((character, index) => {
+        window.setTimeout(() => {
+          terminalCommand.textContent += character;
+        }, 70 * (index + 1));
+      });
+    };
+
+    if (terminalCommand && heroImage) {
+      terminalCommand.textContent = '';
+
+      if (heroImage.complete && heroImage.naturalWidth > 0) {
+        typeTerminalCommand();
+      } else {
+        heroImage.addEventListener('load', typeTerminalCommand, { once: true });
+        heroImage.addEventListener('error', () => {
+          terminalCommand.textContent = terminalCommand.dataset.command ?? '>sudo blogs.sh';
+        }, { once: true });
+      }
+    }
   </script>
 </BaseLayout>
 
 <style>
+  .blog-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(20rem, 1fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .blog-hero :global(.section-header) {
+    margin-bottom: 0;
+  }
+
+  .hero-art {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid rgba(0, 180, 255, 0.36);
+    border-radius: 8px;
+    background: rgba(13, 13, 26, 0.88);
+    box-shadow: 0 0 32px rgba(0, 180, 255, 0.12);
+  }
+
+  .hero-art::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, transparent 0, rgba(5, 5, 8, 0.08) 100%),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.025) 0,
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px,
+        transparent 5px
+      );
+    mix-blend-mode: screen;
+  }
+
+  .hero-art img {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+  }
+
+  .terminal-command {
+    position: absolute;
+    left: 10%;
+    top: 40%;
+    z-index: 1;
+    margin: 0;
+    color: var(--color-terminal);
+    font-size: clamp(0.82rem, 1.7vw, 1.2rem);
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.85);
+    transform: rotate(-1deg);
+    white-space: nowrap;
+  }
+
   .filters {
     margin-bottom: 1.25rem;
     padding: 1rem;
@@ -103,6 +218,21 @@ const tags = [...new Set(posts.flatMap((post) => post.tags))].sort();
   }
 
   @media (max-width: 760px) {
+    .blog-hero {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .hero-art {
+      order: -1;
+    }
+
+    .terminal-command {
+      left: 8.5%;
+      top: 39%;
+      font-size: clamp(0.78rem, 4vw, 1rem);
+    }
+
     .grid {
       grid-template-columns: 1fr;
     }

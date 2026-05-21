@@ -17,11 +17,13 @@ type Repo = {
 let repos: Repo[] = [];
 
 try {
-  const res = await fetch('https://api.github.com/users/MadDogWarner/repos?sort=updated&per_page=20');
+  const ghHeaders: Record<string, string> = { 'Accept': 'application/vnd.github+json' };
+  if (import.meta.env.GITHUB_TOKEN) ghHeaders['Authorization'] = `Bearer ${import.meta.env.GITHUB_TOKEN}`;
+  const res = await fetch('https://api.github.com/users/MadDogWarner/repos?sort=updated&per_page=100', { headers: ghHeaders });
   if (res.ok) {
     const data = await res.json();
     repos = data
-      .filter((repo: any) => !repo.fork)
+      .filter((repo: any) => !repo.fork && repo.name !== 'maddogwarnercom')
       .sort((a: any, b: any) => new Date(b.updated_at).valueOf() - new Date(a.updated_at).valueOf())
       .map((repo: any) => ({
         name: repo.name,
@@ -53,7 +55,17 @@ if (!repos.length) {
 <BaseLayout title="Projects" description="MadDogWarner projects and GitHub repositories.">
   <section class="section">
     <div class="container">
-      <SectionHeader eyebrow="// projects.index" title="Projects" text="Build-time GitHub data with local content fallback." />
+      <div class="projects-hero">
+        <SectionHeader eyebrow="// projects.index" title="Projects" text="Build-time GitHub data with local content fallback." />
+        <figure class="hero-art" aria-label="MadDogWarner avatar repairing an infected server">
+          <img
+            src="/images/projects-hero.png"
+            alt="MadDogWarner cyber dog repairing a dismantled malware-infected server"
+            loading="eager"
+            decoding="async"
+          />
+        </figure>
+      </div>
       <div class="grid">
         {repos.map((repo) => <ProjectCard repo={repo} />)}
       </div>
@@ -62,6 +74,51 @@ if (!repos.length) {
 </BaseLayout>
 
 <style>
+  .projects-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(20rem, 1fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .projects-hero :global(.section-header) {
+    margin-bottom: 0;
+  }
+
+  .hero-art {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid rgba(0, 180, 255, 0.36);
+    border-radius: 8px;
+    background: rgba(13, 13, 26, 0.88);
+    box-shadow: 0 0 32px rgba(0, 180, 255, 0.12);
+  }
+
+  .hero-art::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, transparent 0, rgba(5, 5, 8, 0.08) 100%),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.025) 0,
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px,
+        transparent 5px
+      );
+    mix-blend-mode: screen;
+  }
+
+  .hero-art img {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+  }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -75,9 +132,17 @@ if (!repos.length) {
   }
 
   @media (max-width: 680px) {
+    .projects-hero {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .hero-art {
+      order: -1;
+    }
+
     .grid {
       grid-template-columns: 1fr;
     }
   }
 </style>
-

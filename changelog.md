@@ -7,6 +7,10 @@ This project follows a simple changelog format. Add new entries at the top under
 ## 2026-05-21
 
 - Added copyright and license notice to `readme.md` referencing the Copyright page.
+- Added a generated blog hero image and responsive Blog page hero layout.
+- Added image-load-triggered terminal typing animation for the Blog page `>sudo blogs.sh` overlay.
+- Added a generated Projects page hero image showing the MadDogWarner cyber dog repairing a malware-infected server.
+- Updated the Projects page with a responsive hero layout matching the Blog page treatment.
 
 ---
 
