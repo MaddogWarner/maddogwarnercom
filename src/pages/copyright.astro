@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+
+const lastUpdated = '21 May 2026';
+const year = new Date().getFullYear();
+---
+
+<BaseLayout title="Copyright" description="Copyright notice for MadDogWarner.com.">
+  <section class="section legal">
+    <div class="container">
+      <SectionHeader eyebrow="// copyright.notice" title="Copyright" text={`Last updated: ${lastUpdated} AEST`} />
+
+      <div class="notice surface-card">
+        <p>
+          This page sets out the copyright position for MadDogWarner.com. It is a practical website notice,
+          not legal advice.
+        </p>
+      </div>
+
+      <div class="content">
+        <h2>Copyright notice</h2>
+        <p>
+          Unless otherwise stated, the original written content, site copy, page structure, project
+          descriptions, blog posts, generated site assets, and other original materials published on
+          MadDogWarner.com are protected by copyright.
+        </p>
+
+        <p>
+          Copyright protection in Australia is automatic. It applies when original material is created and
+          recorded in a material form, including electronic form. No registration, copyright notice, or
+          &copy; symbol is required for copyright to exist in Australia, but this notice is provided to
+          identify the copyright owner and set expectations for use.
+        </p>
+
+        <p><strong>&copy; {year} MadDogWarner. All rights reserved.</strong></p>
+
+        <h2>Permitted use</h2>
+        <p>
+          You must not copy, reproduce, republish, adapt, distribute, communicate, scrape, or commercially
+          use material from this site without prior written permission, except where permitted by law, such
+          as fair dealing exceptions under Australian copyright law.
+        </p>
+
+        <h2>Third-party material</h2>
+        <p>
+          Material credited to another source, linked third-party content, vendor names, product names,
+          trademarks, open-source dependencies, and externally hosted content remain the property of their
+          respective owners. Any use of those names or references is for identification, commentary,
+          technical discussion, attribution, or interoperability purposes.
+        </p>
+
+        <h2>AI assistance</h2>
+        <p>
+          This site was built with assistance from Claude and Codex. Unless otherwise stated, AI assistance
+          does not change the intended ownership claim over original site content authored, selected, edited,
+          arranged, and published by MadDogWarner.
+        </p>
+
+        <h2>Attribution and removal requests</h2>
+        <p>
+          If you believe material on this site has been incorrectly attributed, used in error, or requires
+          removal, contact MadDogWarner through the available project or repository contact channel.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding-top: 5rem;
+  }
+
+  .notice {
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+  }
+
+  .notice p {
+    margin: 0;
+  }
+
+  .content {
+    max-width: 78ch;
+  }
+
+  h2 {
+    margin: 2rem 0 0.7rem;
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    letter-spacing: 0;
+  }
+
+  p,
+  li {
+    color: var(--color-muted);
+  }
+
+  strong {
+    color: var(--color-text);
+  }
+</style>
+

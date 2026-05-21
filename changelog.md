@@ -4,10 +4,17 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-05-21
+
+- Added copyright and license notice to `readme.md` referencing the Copyright page.
+
+---
+
 ## 2026-05-20
 
 ### Added
 
+- Added a dedicated Copyright page with an Australian-law-aligned copyright statement and third-party/AI-assistance caveats.
 - Added Astro sitemap generation via `@astrojs/sitemap`.
 - Added `robots.txt` with a sitemap reference for search crawlers.
 - Added a generated server-zap article image for the Hello World launch post.
@@ -26,6 +33,7 @@ This project follows a simple changelog format. Add new entries at the top under
 
 ### Changed
 
+- Updated the footer copyright mark to "© 2026 MadDogWarner. All rights reserved." and added a Copyright legal link.
 - Turned the Codex crew card into an expandable bio with a self-aware implementation-focused write-up.
 - Updated About page Skills and Focus Areas behaviour so skill cards auto-expand together on desktop while preserving mobile tap interaction.
 - Tuned the About skills cards so desktop shows focus details by default while mobile keeps tap-to-expand behaviour.

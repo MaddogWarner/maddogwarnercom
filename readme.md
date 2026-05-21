@@ -143,4 +143,12 @@ Fonts: **Space Grotesk** (headings) · **Inter** (body) · **JetBrains Mono** (c
 
 ---
 
+## License
+
+© 2026 MadDogWarner. All rights reserved.
+
+See the [Copyright](https://maddogwarner.com/copyright/) page for the full statement covering site content, code, and assets.
+
+---
+
 MadDogWarner · Claude · Codex
