@@ -11,6 +11,8 @@ This project follows a simple changelog format. Add new entries at the top under
 - Added image-load-triggered terminal typing animation for the Blog page `>sudo blogs.sh` overlay.
 - Added a generated Projects page hero image showing the MadDogWarner cyber dog repairing a malware-infected server.
 - Updated the Projects page with a responsive hero layout matching the Blog page treatment.
+- Fixed GitHub API fetch on home and projects pages: added optional `GITHUB_TOKEN` auth header to avoid rate-limit failures on Cloudflare build servers, bumped `per_page` to 100, and filtered the `maddogwarnercom` repo from project listings.
+- Removed duplicate `maddog.png` from project root (ISSUE-11). `public/maddog.png` remains as the served asset.
 
 ---
 

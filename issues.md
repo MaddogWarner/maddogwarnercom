@@ -7,13 +7,7 @@
 
 ## Open Issues
 
-### ISSUE-11 · `maddog.png` duplicated at project root
-
-**Files:** `/maddog.png` (root), `/public/maddog.png`
-
-The avatar exists at both locations. The root copy is not served by the build — only `public/maddog.png` is.
-
-Status: open. This is safe to remove once confirmed, but it is a destructive file operation and was not performed without explicit confirmation.
+None.
 
 ---
 
@@ -29,19 +23,21 @@ Status: open. This is safe to remove once confirmed, but it is a destructive fil
 - ISSUE-08: Removed the contradictory `packageManager` field so the npm lock file is authoritative.
 - ISSUE-09: Implemented `TerminalBlock` typing animation.
 - ISSUE-10: Replaced deprecated `Code2` icon with `SquareCode`.
+- ISSUE-11: Removed duplicate `maddog.png` from project root. `public/maddog.png` retained as the served asset.
 
 ---
 
 ## Current Validation
 
 - `npm run check`: passing, 0 errors, 0 warnings, 0 hints.
-- `npm run build`: passing, 8 pages built.
+- `npm run build`: passing, 9 pages built.
 
-Known build warnings:
+Known pending assets:
 
-- `public/images/hero-bg.png` is still pending.
-- `public/images/about-bg.png` is still pending.
+- `public/images/hero-bg.png` — pending.
+- `public/images/about-bg.png` — pending.
+- `public/images/og-default.png` — pending.
 
 ---
 
-*Review by Claude | Updated by Codex | 2026-05-20*
+Review by Claude | Updated 2026-05-21
