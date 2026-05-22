@@ -6,6 +6,7 @@ This project follows a simple changelog format. Add new entries at the top under
 
 ## 2026-05-22
 
+- Limited the Projects page to the four most recent repositories and added a GitHub profile link for the full project list.
 - Added a Web3Forms contact page with hCaptcha integration, navigation entry, CSP allowances, and updated privacy/data collection notices.
 - Converted served PNG artwork and avatar assets to optimised WebP files, reducing the changed image set from 16.4 MB to 970 KB and updating page and blog metadata references.
 - Added the "Three Windows Controls That Make Credential Theft Harder" blog post covering LSASS hardening, ASD Essential Eight control context, and PowerShell verification examples.

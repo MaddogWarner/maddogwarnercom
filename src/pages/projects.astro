@@ -25,6 +25,7 @@ try {
     repos = data
       .filter((repo: any) => !repo.fork && repo.name !== 'maddogwarnercom')
       .sort((a: any, b: any) => new Date(b.updated_at).valueOf() - new Date(a.updated_at).valueOf())
+      .slice(0, 4)
       .map((repo: any) => ({
         name: repo.name,
         description: repo.description,
@@ -41,7 +42,7 @@ try {
 
 if (!repos.length) {
   const fallback = await getCollection('projects');
-  repos = fallback.map((project) => ({
+  repos = fallback.slice(0, 4).map((project) => ({
     name: project.data.name,
     description: project.data.description,
     language: project.data.language,
@@ -69,6 +70,9 @@ if (!repos.length) {
       <div class="grid">
         {repos.map((repo) => <ProjectCard repo={repo} />)}
       </div>
+      <a class="more mono" href="https://github.com/MadDogWarner" target="_blank" rel="noopener noreferrer">
+        Check out all my projects on my GitHub
+      </a>
     </div>
   </section>
 </BaseLayout>
@@ -123,6 +127,13 @@ if (!repos.length) {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
+  }
+
+  .more {
+    display: inline-flex;
+    margin-top: 1.25rem;
+    color: var(--color-accent);
+    font-weight: 700;
   }
 
   @media (max-width: 1020px) {
