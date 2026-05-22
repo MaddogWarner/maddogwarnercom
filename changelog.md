@@ -6,6 +6,7 @@ This project follows a simple changelog format. Add new entries at the top under
 
 ## 2026-05-22
 
+- Converted served PNG artwork and avatar assets to optimised WebP files, reducing the changed image set from 16.4 MB to 970 KB and updating page and blog metadata references.
 - Added the "Three Windows Controls That Make Credential Theft Harder" blog post covering LSASS hardening, ASD Essential Eight control context, and PowerShell verification examples.
 - Added the generated Windows credential-theft article image showing a blocked hacker cat behind jail bars.
 - Added RSS feed at `/rss.xml` via `@astrojs/rss`: auto-generated at build time, includes all non-draft blog posts sorted by date.
