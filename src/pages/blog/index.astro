@@ -22,7 +22,10 @@ const tags = [...new Set(posts.flatMap((post) => post.tags))].sort();
   <section class="section">
     <div class="container">
       <div class="blog-hero">
-        <SectionHeader eyebrow="// blog.posts" title="Blog" />
+        <div class="blog-header">
+          <SectionHeader eyebrow="// blog.posts" title="Blog" />
+          <a class="rss-link mono" href="/rss.xml" aria-label="Subscribe via RSS">RSS feed</a>
+        </div>
         <figure class="hero-art" aria-label="MadDogWarner avatar at a terminal">
           <img
             src="/images/blog-hero.png"
@@ -119,8 +122,28 @@ const tags = [...new Set(posts.flatMap((post) => post.tags))].sort();
     margin-bottom: 2rem;
   }
 
+  .blog-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
   .blog-hero :global(.section-header) {
     margin-bottom: 0;
+  }
+
+  .rss-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-accent);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .rss-link:hover,
+  .rss-link:focus-visible {
+    text-decoration: underline;
   }
 
   .hero-art {

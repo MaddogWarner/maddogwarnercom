@@ -1,5 +1,5 @@
 ---
-import { GitBranch } from '@lucide/astro';
+import { GitBranch, Rss } from '@lucide/astro';
 const year = new Date().getFullYear();
 ---
 
@@ -15,6 +15,7 @@ const year = new Date().getFullYear();
     <a href="/privacy/">Privacy</a>
     <a href="/data-collection/">Data Collection</a>
     <a href="/copyright/">Copyright</a>
+    <a href="/rss.xml" aria-label="RSS feed"><Rss size={14} aria-hidden="true" /> RSS</a>
   </nav>
   <p class="tagline mono">Scanning for vulnerabilities... none found.</p>
 </footer>

@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-05-22
+
+- Added the "Three Windows Controls That Make Credential Theft Harder" blog post covering LSASS hardening, ASD Essential Eight control context, and PowerShell verification examples.
+- Added the generated Windows credential-theft article image showing a blocked hacker cat behind jail bars.
+- Added RSS feed at `/rss.xml` via `@astrojs/rss`: auto-generated at build time, includes all non-draft blog posts sorted by date.
+- Added RSS auto-discovery `<link>` in `BaseLayout.astro` so RSS readers detect the feed from any page.
+- Added RSS subscribe link in the blog index page header and in the site footer.
+
+---
+
 ## 2026-05-21
 
 - Added copyright and license notice to `readme.md` referencing the Copyright page.

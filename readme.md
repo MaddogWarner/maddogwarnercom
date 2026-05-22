@@ -91,6 +91,16 @@ featured: true
 
 ---
 
+## RSS Feed
+
+The blog publishes an RSS feed at `/rss.xml`. It is generated at build time by `@astrojs/rss` and includes all non-draft posts sorted newest first.
+
+Subscribe URL: `https://maddogwarner.com/rss.xml`
+
+The feed updates automatically on every Cloudflare Pages deploy — no manual step needed when a new post is published. RSS readers that support auto-discovery will find the feed from any page on the site.
+
+---
+
 ## Build and Deploy
 
 ```bash
