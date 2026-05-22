@@ -522,4 +522,153 @@ featured: true
 
 ---
 
+---
+
+## 14. Contact Page
+
+### Context
+
+Add a `/contact/` page so visitors can send messages without exposing the Proton Mail address to spam harvesters. Uses Web3Forms (free, 250 submissions/month) to forward submissions to `maddogwarner@proton.me`. Spam protection via Web3Forms' built-in hCaptcha (zero-config, no separate hCaptcha account needed).
+
+---
+
+### Files to create / modify
+
+| File | Action |
+| --- | --- |
+| `src/pages/contact.astro` | **Create** |
+| `src/components/NavBar.astro` | **Modify** — add Contact link |
+| `changelog.md` | **Modify** — add entry |
+
+No new npm dependencies.
+
+---
+
+### NavBar update
+
+Add to the `links` array in `src/components/NavBar.astro` after Blog:
+
+```ts
+{ href: '/contact/', label: 'Contact' },
+```
+
+---
+
+### Page structure
+
+```text
+BaseLayout (title="Contact", description="Get in touch with MadDogWarner — IT professional, homelab operator, and security obsessive.")
+└── <script type="application/ld+json"> — ContactPage schema (see below)
+└── <section class="section">
+    └── <div class="container">
+        ├── SectionHeader eyebrow="// contact.sh" title="Contact"
+        └── Two-column grid (desktop ~40/60; mobile stacked)
+            ├── Left — surface-card: contact info
+            │   ├── Intro: "Have a question, collaboration idea, or want to talk shop?"
+            │   ├── GitHub link (GitBranch icon + "MadDogWarner on GitHub")
+            │   └── Small note: "Replies come from maddogwarner@proton.me"
+            └── Right — surface-card: contact form
+                └── <form id="contact-form">
+                    ├── hidden input name="access_key"   value="{WEB3FORMS_ACCESS_KEY}"
+                    ├── hidden input name="subject"      value="New contact — maddogwarner.com"
+                    ├── hidden input name="from_name"    value="MadDogWarner Contact"
+                    ├── hidden input name="redirect"     value="false"
+                    ├── Name field        (required)
+                    ├── Email field       (type="email", required)
+                    ├── Subject field     (required)
+                    ├── Message textarea  (required, rows=5)
+                    ├── <div class="h-captcha" data-captcha="true" data-theme="dark">
+                    └── Submit button ("Send message")
+                └── Inline result area (hidden until submission)
+```
+
+The `{WEB3FORMS_ACCESS_KEY}` placeholder must be replaced with the real key before implementation. David will supply it.
+
+---
+
+### JSON-LD schema
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Contact MadDogWarner",
+  "url": "https://maddogwarner.com/contact/"
+}
+</script>
+```
+
+Place this inside `<BaseLayout>` or via a `<slot name="head">` if BaseLayout supports it — otherwise inline it just after the opening `<body>` tag.
+
+---
+
+### Script tags (before `</body>`)
+
+Web3Forms handles hCaptcha loading — one script tag is all that's needed:
+
+```html
+<script src="https://web3forms.com/client/script.js" async defer></script>
+```
+
+Do **not** add a separate hCaptcha script.
+
+---
+
+### JavaScript behaviour (`<script>` block in `contact.astro`)
+
+```text
+1. On form submit → event.preventDefault()
+2. Guard: check form.querySelector('textarea[name=h-captcha-response]').value
+   — if empty: show "Please complete the captcha" message, abort
+3. Disable submit button, set label to "Sending…"
+4. Collect FormData → JSON.stringify → POST to https://api.web3forms.com/submit
+   headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+5. If data.success === true:
+   — show success message (--color-terminal green)
+   — form.reset()
+   — hcaptcha.reset()
+   — re-enable submit button
+6. On error or data.success === false:
+   — show error message (red/warning tone, e.g. #ff4d4d)
+   — re-enable submit button
+```
+
+---
+
+### Styling conventions
+
+Follow existing site patterns exactly:
+
+- `surface-card` class for both panels
+- Form inputs: `background: rgba(13,13,26,0.88)`, `border: 1px solid rgba(0,180,255,0.34)`, accent focus ring
+- Labels: `mono` class, small, `var(--color-muted)`
+- Submit button: accent border, glow on hover — match existing CTA button style
+- Success text: `var(--color-terminal)` (#00ff88)
+- Error text: `#ff4d4d` (inline, no new design token)
+- Mobile: single column, form card full-width
+
+---
+
+### hCaptcha activation (David's responsibility — before Codex commits)
+
+1. In the Web3Forms dashboard (`app.web3forms.com`): open the form → enable hCaptcha as the preferred captcha method
+2. This is a dashboard toggle — no code change needed
+
+> **UX note:** hCaptcha free tier can present challenging puzzles. If this becomes a user complaint post-launch, the fallback option is a hidden honeypot field. That's a future decision, not a blocker.
+
+---
+
+### Verification checklist
+
+- [ ] `npm run check` — 0 TypeScript errors
+- [ ] `npm run build` — 11 pages (was 10), `dist/contact/index.html` present
+- [ ] `/contact/` renders locally — both panels visible, hCaptcha widget loads
+- [ ] Test submission received in Proton Mail (`maddogwarner@proton.me`)
+- [ ] Submission without completing hCaptcha — client-side guard blocks it
+- [ ] Contact link in NavBar is active on `/contact/`, appears in mobile hamburger menu
+- [ ] JSON-LD validates at Google Rich Results Test
+
+---
+
 *Plan authored by Claude | Implementation by Codex | Site for MadDogWarner*

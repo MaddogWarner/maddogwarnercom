@@ -1,0 +1,318 @@
+---
+import { GitBranch, Mail, ShieldCheck } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with MadDogWarner - IT professional, homelab operator, and security obsessive."
+>
+  <script is:inline type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact MadDogWarner",
+      "url": "https://maddogwarner.com/contact/"
+    }
+  </script>
+
+  <section class="section contact">
+    <div class="container">
+      <SectionHeader eyebrow="// contact.sh" title="Contact" />
+
+      <div class="contact-grid">
+        <aside class="contact-info surface-card">
+          <Mail size={30} aria-hidden="true" />
+          <h3>Have a question, collaboration idea, or want to talk shop?</h3>
+          <p>
+            Send a message through the form. Do not include credentials, health information, or other
+            sensitive data.
+          </p>
+          <a class="github" href="https://github.com/MadDogWarner" target="_blank" rel="noopener noreferrer">
+            <GitBranch size={19} aria-hidden="true" />
+            MadDogWarner on GitHub
+          </a>
+          <p class="reply-note mono">Replies are sent by email.</p>
+        </aside>
+
+        <div class="form-card surface-card">
+          <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="f5cac016-c050-47c7-a9f9-44a3c8d57597" />
+            <input type="hidden" name="subject" value="New contact - maddogwarner.com" />
+            <input type="hidden" name="from_name" value="MadDogWarner Contact" />
+            <input type="hidden" name="redirect" value="false" />
+
+            <div class="fields">
+              <label>
+                <span class="mono">Name</span>
+                <input name="name" type="text" autocomplete="name" required />
+              </label>
+              <label>
+                <span class="mono">Email</span>
+                <input name="email" type="email" autocomplete="email" required />
+              </label>
+              <label class="field-wide">
+                <span class="mono">Subject</span>
+                <input name="topic" type="text" required />
+              </label>
+              <label class="field-wide">
+                <span class="mono">Message</span>
+                <textarea name="message" rows="5" required></textarea>
+              </label>
+            </div>
+
+            <div class="captcha">
+              <ShieldCheck size={18} aria-hidden="true" />
+              <div class="h-captcha" data-captcha="true" data-theme="dark"></div>
+            </div>
+
+            <button type="submit">Send message</button>
+          </form>
+
+          <p class="result mono" id="contact-result" role="status" aria-live="polite" hidden></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline src="https://web3forms.com/client/script.js" async defer></script>
+</BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#contact-form');
+  const result = document.querySelector<HTMLParagraphElement>('#contact-result');
+  const submitButton = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const submitLabel = submitButton?.textContent ?? 'Send message';
+
+  const showResult = (message: string, state: 'success' | 'error') => {
+    if (!result) return;
+    result.hidden = false;
+    result.textContent = message;
+    result.dataset.state = state;
+  };
+
+  const setSubmitting = (submitting: boolean) => {
+    if (!submitButton) return;
+    submitButton.disabled = submitting;
+    submitButton.textContent = submitting ? 'Sending...' : submitLabel;
+  };
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const captchaResponse = form.querySelector<HTMLTextAreaElement>('textarea[name="h-captcha-response"]');
+    if (!captchaResponse?.value) {
+      showResult('Please complete the captcha.', 'error');
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData)),
+      });
+      const data = await response.json();
+
+      if (!response.ok || data.success !== true) {
+        throw new Error(data.message ?? 'Contact form submission failed.');
+      }
+
+      showResult('Message sent. MadDogWarner will reply when available.', 'success');
+      form.reset();
+      (window as Window & { hcaptcha?: { reset: () => void } }).hcaptcha?.reset();
+    } catch (error) {
+      showResult('Message could not be sent. Please try again later.', 'error');
+    } finally {
+      setSubmitting(false);
+    }
+  });
+</script>
+
+<style>
+  .contact {
+    padding-top: 5rem;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.35fr);
+    gap: clamp(1rem, 3vw, 2rem);
+    align-items: start;
+  }
+
+  .contact-info,
+  .form-card {
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .contact-info {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .contact-info > svg {
+    color: var(--color-accent);
+  }
+
+  h3 {
+    margin: 0;
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.45rem, 2.5vw, 2.1rem);
+    letter-spacing: 0;
+    line-height: 1.15;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .github {
+    display: inline-flex;
+    width: fit-content;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.65rem;
+    border: 1px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    color: var(--color-accent);
+    font-weight: 700;
+    transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  }
+
+  .github:hover,
+  .github:focus-visible {
+    background: rgba(0, 180, 255, 0.08);
+    box-shadow: 0 0 24px var(--color-glow);
+    transform: translateY(-1px);
+  }
+
+  .reply-note {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
+    color: var(--color-text);
+    font-size: 0.84rem;
+    overflow-wrap: anywhere;
+  }
+
+  form {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  label,
+  label span {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  label span {
+    color: var(--color-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .field-wide {
+    grid-column: 1 / -1;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    border: 1px solid rgba(0, 180, 255, 0.34);
+    border-radius: 8px;
+    background: rgba(13, 13, 26, 0.88);
+    color: var(--color-text);
+    padding: 0.78rem 0.9rem;
+  }
+
+  textarea {
+    min-height: 9rem;
+    resize: vertical;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(0, 180, 255, 0.16);
+    outline: none;
+  }
+
+  .captcha {
+    display: flex;
+    min-width: 0;
+    align-items: flex-start;
+    gap: 0.65rem;
+    overflow-x: auto;
+  }
+
+  .captcha > svg {
+    flex: 0 0 auto;
+    margin-top: 0.8rem;
+    color: var(--color-terminal);
+  }
+
+  button {
+    width: fit-content;
+    min-height: 2.75rem;
+    border: 1px solid var(--color-accent);
+    border-radius: 8px;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    cursor: pointer;
+    padding: 0.72rem 1rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.88rem;
+    font-weight: 700;
+    transition: background 180ms ease, box-shadow 180ms ease, opacity 180ms ease, transform 180ms ease;
+  }
+
+  button:hover,
+  button:focus-visible {
+    background: #38c6ff;
+    box-shadow: 0 0 24px var(--color-glow);
+    transform: translateY(-1px);
+  }
+
+  button:disabled {
+    cursor: wait;
+    opacity: 0.68;
+    transform: none;
+  }
+
+  .result {
+    margin-top: 1rem;
+    font-size: 0.88rem;
+  }
+
+  .result[data-state="success"] {
+    color: var(--color-terminal);
+  }
+
+  .result[data-state="error"] {
+    color: #ff4d4d;
+  }
+
+  @media (max-width: 760px) {
+    .contact-grid,
+    .fields {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

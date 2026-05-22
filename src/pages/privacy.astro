@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 
-const lastUpdated = '20 May 2026';
+const lastUpdated = '22 May 2026';
 ---
 
 <BaseLayout title="Privacy" description="Privacy notice for MadDogWarner.com.">
@@ -28,12 +28,13 @@ const lastUpdated = '20 May 2026';
         <h2>What this site collects</h2>
         <p>
           The site is currently a static website. It does not provide user accounts, checkout, newsletter
-          signup, comments, contact forms, advertising pixels, or application login.
+          signup, comments, advertising pixels, or application login. It provides a voluntary contact form.
         </p>
         <p>The following limited technical data may still be processed when you visit:</p>
         <ul>
           <li>standard web server and CDN logs, such as IP address, request URL, user agent, referrer, timestamp, and response status</li>
           <li>browser requests to third-party font infrastructure when Google Fonts are loaded</li>
+          <li>contact form fields you voluntarily submit, including your name, email address, subject, and message</li>
           <li>information you voluntarily disclose if you contact MadDogWarner outside this website</li>
         </ul>
 
@@ -42,7 +43,7 @@ const lastUpdated = '20 May 2026';
           <li>to serve the website and requested pages</li>
           <li>to maintain availability, performance, and operational resilience</li>
           <li>to detect abuse, troubleshoot faults, and protect the site from malicious traffic</li>
-          <li>to respond to voluntary communications received outside the website</li>
+          <li>to read and respond to voluntary communications sent through the contact form or external channels</li>
         </ul>
 
         <h2>Legal basis and transparency</h2>
@@ -66,6 +67,7 @@ const lastUpdated = '20 May 2026';
           <li>hosting, CDN, DNS, and security providers</li>
           <li>Google Fonts infrastructure for font delivery</li>
           <li>GitHub when you follow external repository links</li>
+          <li>Web3Forms and hCaptcha when you use the contact form</li>
         </ul>
         <p>
           This site does not sell personal information and does not intentionally share personal information
@@ -83,7 +85,8 @@ const lastUpdated = '20 May 2026';
         <p>
           Static site content does not require visitor profiles. Technical logs, if retained by hosting or
           security providers, should be kept only as long as required for operations, diagnostics, security,
-          abuse prevention, or legal compliance.
+          abuse prevention, or legal compliance. Contact messages may be kept where needed to respond,
+          maintain correspondence records, investigate abuse, or meet legal obligations.
         </p>
 
         <h2>Your rights</h2>
@@ -103,8 +106,8 @@ const lastUpdated = '20 May 2026';
 
         <h2>Changes</h2>
         <p>
-          This notice should be reviewed whenever analytics, contact forms, newsletters, embedded content,
-          comments, account features, or other data-collecting functionality is added.
+          This notice should be reviewed whenever the contact form changes or analytics, newsletters,
+          embedded content, comments, account features, or other data-collecting functionality is added.
         </p>
       </div>
     </div>
@@ -150,4 +153,3 @@ const lastUpdated = '20 May 2026';
     padding-left: 1.25rem;
   }
 </style>
-
