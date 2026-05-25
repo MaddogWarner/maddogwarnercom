@@ -6,6 +6,7 @@ This project follows a simple changelog format. Add new entries at the top under
 
 ## 2026-05-25
 
+- Added Facebook and Discord social icon links to the navigation bar alongside the existing GitHub icon.
 - Added Facebook and Discord social icon links to the site footer alongside the existing GitHub icon.
 - Added Facebook and Discord link buttons to the Contact page sidebar alongside the existing GitHub button.
 - Updated homepage meta description from a 50-character stub to a full 144-character description so Google uses the tag rather than scraping page body content.
