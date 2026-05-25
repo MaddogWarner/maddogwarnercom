@@ -51,7 +51,6 @@ import SectionHeader from '../components/SectionHeader.astro';
         <div class="form-card surface-card">
           <form id="contact-form" action="https://submit-form.com/VNqUCubq7" method="POST">
             <input type="hidden" name="_email.subject" value="New contact - maddogwarner.com" />
-            <input type="hidden" name="_email.from" value="MadDogWarner Contact" />
 
             <div class="fields">
               <label>
@@ -122,7 +121,6 @@ import SectionHeader from '../components/SectionHeader.astro';
         },
         body: JSON.stringify(Object.fromEntries(formData)),
       });
-      const data = await response.json();
 
       if (!response.ok) {
         throw new Error('Contact form submission failed.');
@@ -148,7 +146,7 @@ import SectionHeader from '../components/SectionHeader.astro';
     display: grid;
     grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1.35fr);
     gap: clamp(1rem, 3vw, 2rem);
-    align-items: start;
+    align-items: stretch;
   }
 
   .contact-info,
