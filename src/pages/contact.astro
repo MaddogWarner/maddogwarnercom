@@ -49,11 +49,9 @@ import SectionHeader from '../components/SectionHeader.astro';
         </aside>
 
         <div class="form-card surface-card">
-          <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="f5cac016-c050-47c7-a9f9-44a3c8d57597" />
-            <input type="hidden" name="subject" value="New contact - maddogwarner.com" />
-            <input type="hidden" name="from_name" value="MadDogWarner Contact" />
-            <input type="hidden" name="redirect" value="false" />
+          <form id="contact-form" action="https://submit-form.com/VNqUCubq7" method="POST">
+            <input type="hidden" name="_email.subject" value="New contact - maddogwarner.com" />
+            <input type="hidden" name="_email.from" value="MadDogWarner Contact" />
 
             <div class="fields">
               <label>
@@ -76,7 +74,7 @@ import SectionHeader from '../components/SectionHeader.astro';
 
             <div class="captcha">
               <ShieldCheck size={18} aria-hidden="true" />
-              <div class="h-captcha" data-captcha="true" data-theme="dark"></div>
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAADWERx-Xh2VvnZFY" data-theme="dark"></div>
             </div>
 
             <button type="submit">Send message</button>
@@ -88,7 +86,7 @@ import SectionHeader from '../components/SectionHeader.astro';
     </div>
   </section>
 
-  <script is:inline src="https://web3forms.com/client/script.js" async defer></script>
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </BaseLayout>
 
 <script>
@@ -113,7 +111,7 @@ import SectionHeader from '../components/SectionHeader.astro';
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const captchaResponse = form.querySelector<HTMLTextAreaElement>('textarea[name="h-captcha-response"]');
+    const captchaResponse = form.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]');
     if (!captchaResponse?.value) {
       showResult('Please complete the captcha.', 'error');
       return;
@@ -133,13 +131,13 @@ import SectionHeader from '../components/SectionHeader.astro';
       });
       const data = await response.json();
 
-      if (!response.ok || data.success !== true) {
-        throw new Error(data.message ?? 'Contact form submission failed.');
+      if (!response.ok) {
+        throw new Error('Contact form submission failed.');
       }
 
       showResult('Message sent. MadDogWarner will reply when available.', 'success');
       form.reset();
-      (window as Window & { hcaptcha?: { reset: () => void } }).hcaptcha?.reset();
+      (window as Window & { turnstile?: { reset: () => void } }).turnstile?.reset();
     } catch (error) {
       showResult('Message could not be sent. Please try again later.', 'error');
     } finally {
