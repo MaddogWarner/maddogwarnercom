@@ -110,13 +110,6 @@ import SectionHeader from '../components/SectionHeader.astro';
 
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
-
-    const captchaResponse = form.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]');
-    if (!captchaResponse?.value) {
-      showResult('Please complete the captcha.', 'error');
-      return;
-    }
-
     setSubmitting(true);
 
     try {
