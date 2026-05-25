@@ -7,6 +7,7 @@ This project follows a simple changelog format. Add new entries at the top under
 ## 2026-05-25
 
 - Updated homepage meta description from a 50-character stub to a full 144-character description so Google uses the tag rather than scraping page body content.
+- Updated homepage page title to "MadDogWarner | Cyber Security Blog" for clearer Google search result labelling.
 
 ---
 
