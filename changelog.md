@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-05-25
+
+- Updated homepage meta description from a 50-character stub to a full 144-character description so Google uses the tag rather than scraping page body content.
+
+---
+
 ## 2026-05-22
 
 - Limited the Projects page to the four most recent repositories and added a GitHub profile link for the full project list.
