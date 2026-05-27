@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-05-27
+
+- Added the "Building Better Sysadmin Security Tools: Part 1" blog post introducing the Windows Essential Eight hardening assessment tool as the first instalment in a practical sysadmin security tooling series.
+- Documented the tool's current read-only assessment capabilities, including Essential Eight hardening checks, Microsoft Defender Antivirus exclusion review, ASD audit policy checks, and markdown/CSV evidence exports.
+- Added roadmap coverage for planned IP range and Active Directory OU-based fleet scanning while preserving the audit-only safety model.
+- Added the generated MadDogWarner cyber dog malware USB banner image for the new article.
+
+---
+
 ## 2026-05-25
 
 - Added Facebook and Discord social icon links to the site footer alongside the existing GitHub icon.

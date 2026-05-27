@@ -1,0 +1,152 @@
+---
+title: "Building Better Sysadmin Security Tools: Part 1"
+description: "A practical Essential Eight hardening assessment tool for Windows sysadmins, with read-only checks, exportable evidence, and a roadmap toward fleet scanning."
+date: 2026-05-27
+tags: ["cybersecurity", "essential-eight", "sysadmin", "powershell", "windows", "compliance"]
+draft: false
+image: "/images/building-better-sysadmin-security-tools-part-1.webp"
+---
+
+This is Part 1 of a series about building better security tools for sysadmins.
+
+Not more dashboards that look impressive until someone asks where the evidence came from. Not another spreadsheet with conditional formatting doing its best impression of a security strategy. Actual tools. Practical tools. Tools that help the people operating Windows fleets prove what is configured, find what is missing, and explain risk without turning every conversation into a governance escape room.
+
+The first cab off the rank is the Windows Essential Eight hardening assessment tool we have been building.
+
+It is a read-only PowerShell and Windows Forms tool that checks Windows OS and application hardening settings against the ASD Essential Eight maturity model. It is aimed at the sysadmins, engineers, and security teams who need to inspect real machines, collect useful evidence, and move from "we think this is enabled" to "here is the result, here is the raw value, and here is the recommended state".
+
+Compliance theatre can keep the fog machine. This one is for the people who still have to make the thing work on Tuesday morning.
+
+## Why build this
+
+Essential Eight uplift is important, especially in environments with sensitive data, hybrid identity, legacy workloads, shared infrastructure, and the usual collection of systems that everyone agrees are business critical until it is time to fund their replacement.
+
+Healthcare is a good example. You need strong controls, useful logging, defensible evidence, and changes that do not casually break clinical or operational workflows. Security matters. Availability matters. Auditability matters. So does not making the service desk wear a helmet every time a control gets rolled out.
+
+The problem is that frameworks do not become implementation by themselves.
+
+Sysadmins are often handed a maturity target, a due date, and a spreadsheet that has never met Group Policy, Microsoft Defender, PowerShell logging, SMB signing, event log sizing, or a workstation image with six years of interesting decisions baked into it.
+
+The mission here is simple:
+
+- make security state visible on real Windows hosts
+- produce evidence that technical teams and compliance teams can both use
+- keep the assessment read-only
+- explain what each result means
+- support practical uplift rather than vague maturity theatre
+
+The tool is not trying to be a giant governance platform. It is trying to be useful.
+
+## What it does today
+
+The current entry point is `starthere.ps1`. Run it on a supported Windows host and it opens a Windows Forms interface. If it is not already running as administrator, it prompts for elevation first, because a lot of useful Windows security state is not available from a polite low-privilege glance through the curtains.
+
+From the GUI, you can run three main assessment paths:
+
+| Area | What it does |
+| --- | --- |
+| Essential Eight hardening | Checks Windows hardening controls across memory protection, PowerShell, Defender, ASR, SMB, firewall, RDP, credential protection, encryption, and system security |
+| MDE exclusions | Inventories Microsoft Defender Antivirus exclusions and highlights risky exclusions such as broad user, temp, or drive-root paths |
+| Audit policy | Checks local Advanced Audit Policy and event log sizing against ASD Windows Event Logging and Forwarding guidance |
+
+The results appear in the GUI with categories, check names, maturity level mappings where applicable, status, and details. That matters because a raw registry value is useful to an engineer, but a readable evidence summary is useful when the finding needs to leave the engineering chat and survive contact with a risk meeting.
+
+The export options are deliberately practical:
+
+- markdown for readable reports and LLM-friendly review
+- CSV for Excel and Power BI dashboards
+
+The CSV export includes system context on each row: report date in AEST or AEDT, hostname, IP address, logged-in user, domain or workgroup, OS name, OS build, last patch date, assessment type, status, evidence, recommendations, and assessment-specific fields.
+
+That means a single export can be filtered by `E8`, `MDE`, or `AuditPolicy` without needing someone to merge three files at 4:58 pm and call it "data engineering".
+
+## The checks are practical, not decorative
+
+The Essential Eight hardening checks cover the controls that tend to matter when Windows hosts are actually being attacked or reviewed:
+
+- LSASS Protected Process Light
+- Memory Integrity / HVCI
+- Credential Guard
+- BitLocker OS drive protection and TPM-backed protectors
+- process creation command-line logging
+- PowerShell script block logging, module logging, transcription, v2 engine removal, constrained language mode, and execution policy
+- Defender real-time protection, cloud-delivered protection, tamper protection, and risky exclusion review
+- 14 Attack Surface Reduction rules, including Office abuse, LSASS credential theft, script obfuscation, WMI persistence, ransomware protection, and vulnerable signed driver abuse
+- SMBv1, SMB signing, and Windows Firewall profile state
+- RDP Network Level Authentication
+- WDigest plaintext credential caching
+- UAC, Secure Boot, and AutoRun
+
+The audit policy module checks event log sizes, account logon and logoff auditing, account management, policy change, system integrity, process tracking, object access, and outgoing NTLM audit posture.
+
+Some findings are a straight `PASS` or `FAIL`. Some are `REVIEW`, `AUDIT`, `N/A`, `NOT SUPPORTED`, or `HIGH RISK`, because real environments are messier than a compliance colour palette. A suspended BitLocker state is not the same as a decrypted drive. An advisory audit policy gap is not the same as a missing mandatory control. Unsupported hardware or OS capability should be recorded, not silently thrown into the same bucket as negligence.
+
+That distinction is not pedantry. It is how you avoid bad reporting driving bad decisions.
+
+## Read-only by design
+
+The current workflow is audit-only. It does not change registry values. It does not enable Defender settings. It does not alter firewall profiles, SMB signing, RDP, BitLocker, audit policy, event logs, credentials, permissions, or anything else that can turn a helpful assessment into an unscheduled incident.
+
+That design choice is intentional.
+
+In enterprise and healthcare environments, remediation needs change control, ownership, testing, rollback planning, and visibility. A tool that silently "fixes" production because a control looked red is not a tool. It is an outage with a user interface.
+
+The assessment tool is there to answer safer questions first:
+
+- What is configured on this host?
+- What evidence supports that result?
+- Which gaps are obvious quick wins?
+- Which gaps need proper rollout planning?
+- What can we export for reporting and trend analysis?
+
+Remediation guidance and remediation execution may come later, but they need to be treated as separate workflows. Read-only assessment is the foundation.
+
+## Where this helps
+
+The first use case is a point-in-time compliance assessment. Run the tool on a live workstation or server and get an immediate view of its Essential Eight hardening posture.
+
+That is useful before and after change windows, during targeted reviews, or when someone says "that should already be set by GPO" and the room becomes spiritually quiet.
+
+The second use case is SOE and golden image validation. Before an image gets promoted into production, run the assessment and confirm the expected controls are present. It is much better to find a missing PowerShell logging policy or Defender configuration problem before the image has multiplied across the fleet like a bad idea with admin rights.
+
+The third use case is evidence collection. Security and compliance teams need evidence. Sysadmins need that evidence to come from the system, not from a screenshot safari. Exportable markdown and CSV reports are not glamorous, but they are how you turn local checks into a repeatable review process.
+
+## What comes next
+
+Right now, the tool is host-focused. That is the correct starting point because local accuracy matters. If one machine's result is wrong, scaling it just means being wrong faster.
+
+Over the coming months, the plan is to expand the capability toward broader fleet assessment:
+
+- scan target hosts by IP range
+- target machines by Active Directory OU
+- preserve the read-only assessment model
+- keep exports structured for reporting and dashboarding
+- make failures and unreachable hosts visible instead of pretending silence means compliance
+
+The IP range path should help with smaller estates, segmented networks, and targeted review windows. The AD OU path should fit more naturally into domain-managed environments where servers, workstations, privileged access workstations, or clinical endpoints are already grouped for policy and operational ownership.
+
+That expansion needs to be done carefully. Remote assessment introduces authentication, connectivity, firewall, WinRM, privilege, timeout, and logging considerations. It also raises the stakes for output quality because fleet data gets used for decisions quickly, sometimes by people who have never met the machines they are sorting.
+
+So the direction is clear, but the rule stays the same: make it useful, make it auditable, and do not casually break things.
+
+## The bigger idea
+
+This is Part 1 because the Essential Eight hardening assessment tool is only one piece of the broader mission.
+
+Sysadmins need better security tooling. Not because they cannot read vendor documentation, and not because frameworks are bad. They need better tooling because real environments are complicated, time is limited, and the people expected to implement controls need clear evidence, prioritisation, and repeatable checks.
+
+Good tools should help answer:
+
+- what is the current state?
+- what changed?
+- what matters most?
+- what evidence do we have?
+- what can we safely improve next?
+
+That is the kind of tooling I want to keep building: practical, technical, boring in the right places, and useful enough that sysadmins actually reach for it before the next audit meeting starts warming up the spreadsheet cannon.
+
+More tools are coming.
+
+Your favourite disgruntled sudoer signing off.
+
+- MadDogWarner :D
