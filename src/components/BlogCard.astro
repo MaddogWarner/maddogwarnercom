@@ -23,7 +23,10 @@ const { post } = Astro.props as { post: Post };
 
 <style>
   .blog-card {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
     padding: 1.25rem;
   }
 
@@ -54,6 +57,6 @@ const { post } = Astro.props as { post: Post };
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    margin-top: auto;
   }
 </style>
-
