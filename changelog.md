@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-05-29
+
+- Added SEO-only blog title metadata support so search/social titles can be tuned without changing visible editorial article headings.
+- Added sitewide `Person` and `WebSite` JSON-LD plus dynamic `BlogPosting` JSON-LD for blog posts.
+- Updated homepage and reviewed blog post meta descriptions for stronger Essential Eight, Windows hardening, PowerShell, credential theft, and sysadmin security search alignment.
+
+---
+
 ## 2026-05-27
 
 - Added the "Building Better Sysadmin Security Tools: Part 1" blog post introducing the Windows Essential Eight hardening assessment tool as the first instalment in a practical sysadmin security tooling series.
