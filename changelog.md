@@ -9,6 +9,7 @@ This project follows a simple changelog format. Add new entries at the top under
 - Added SEO-only blog title metadata support so search/social titles can be tuned without changing visible editorial article headings.
 - Added sitewide `Person` and `WebSite` JSON-LD plus dynamic `BlogPosting` JSON-LD for blog posts.
 - Updated homepage and reviewed blog post meta descriptions for stronger Essential Eight, Windows hardening, PowerShell, credential theft, and sysadmin security search alignment.
+- Fixed desktop Blog page tile heights so post cards render as a more consistent two-column grid while preserving natural mobile card sizing.
 
 ---
 
