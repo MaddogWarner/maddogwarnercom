@@ -1,0 +1,4 @@
+Contact: https://github.com/MadDogWarner/maddogwarnercom/security/advisories/new
+Expires: 2027-06-01T00:00:00Z
+Preferred-Languages: en
+Canonical: https://maddogwarner.com/.well-known/security.txt
