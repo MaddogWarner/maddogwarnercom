@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-06-01
+
+- Added a standalone Essential 8 Knowledge Base iOS app privacy policy page at `/privacy/essential-8-knowledge-base/` for App Store Connect and in-app privacy access.
+- Marked the app-specific privacy policy page with `noindex, follow` and excluded it from the generated sitemap so it remains public but low-profile.
+- Added optional page-level robots metadata support to the shared base layout.
+
+---
+
 ## 2026-05-29
 
 - Added SEO-only blog title metadata support so search/social titles can be tuned without changing visible editorial article headings.

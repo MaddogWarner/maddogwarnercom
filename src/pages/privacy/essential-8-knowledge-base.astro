@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+
+const lastUpdated = '1 June 2026';
+---
+
+<BaseLayout
+  title="Essential 8 Knowledge Base Privacy Policy"
+  description="Privacy policy for the Essential 8 Knowledge Base iOS app."
+  robots="noindex, follow"
+>
+  <section class="section legal">
+    <div class="container">
+      <SectionHeader
+        eyebrow="// app.privacy"
+        title="Essential 8 Knowledge Base Privacy Policy"
+        text={`Last updated: ${lastUpdated} AEST`}
+      />
+
+      <div class="notice surface-card">
+        <p>
+          This privacy policy applies only to the Essential 8 Knowledge Base iOS app. It is separate from
+          the general MadDogWarner.com website privacy notice.
+        </p>
+      </div>
+
+      <div class="content">
+        <h2>Summary</h2>
+        <p>
+          Essential 8 Knowledge Base is an offline reference app for Australian system administrators
+          working with the ASD Essential Eight in Windows environments.
+        </p>
+        <p>
+          The app does not collect, record, store, transmit, sell, or share personal data.
+        </p>
+
+        <h2>Data collection</h2>
+        <p>Essential 8 Knowledge Base does not collect user data or device data. The app does not use:</p>
+        <ul>
+          <li>accounts or login</li>
+          <li>analytics SDKs</li>
+          <li>advertising SDKs</li>
+          <li>tracking technologies</li>
+          <li>in-app purchases</li>
+          <li>remote databases or cloud sync</li>
+          <li>crash reporting or telemetry services</li>
+        </ul>
+
+        <h2>Device permissions</h2>
+        <p>
+          The app does not request access to location, contacts, photos, camera, microphone, health data,
+          Bluetooth, calendars, reminders, or device sensors.
+        </p>
+
+        <h2>Network access</h2>
+        <p>
+          No network access is required for the app's core functionality. The reference content is bundled
+          with the app and is available offline.
+        </p>
+        <p>
+          The app may include external reference links to resources such as ASD, ACSC, Microsoft, GitHub,
+          or MadDogWarner. If you open an external link, it opens outside the app and the destination
+          website's own privacy practices apply.
+        </p>
+
+        <h2>Local settings</h2>
+        <p>
+          The Microsoft 365 Additional Controls mode is stored locally on your device only. This setting is
+          used to show or hide optional Microsoft 365 and Microsoft Defender reference notes inside the app.
+          It is not transmitted to MadDogWarner or any third party.
+        </p>
+
+        <h2>Retention and deletion</h2>
+        <p>
+          Because the app does not collect personal data, there is no app-held personal data to retain,
+          delete, export, or transfer. Removing the app from your device removes the locally stored app
+          setting.
+        </p>
+
+        <h2>Third parties</h2>
+        <p>
+          Essential 8 Knowledge Base does not share user data with third parties. External websites opened
+          from reference links are outside the app and are governed by their own privacy notices.
+        </p>
+
+        <h2>Affiliation</h2>
+        <p>
+          Essential 8 Knowledge Base is not affiliated with or endorsed by ASD, ACSC, Microsoft, Apple, or
+          any other referenced organisation.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Privacy questions about Essential 8 Knowledge Base can be sent through the MadDogWarner contact
+          page at <a href="/contact/">maddogwarner.com/contact/</a>.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          This policy may be updated if the app's functionality or data handling changes. The updated date
+          at the top of this page will be changed when this policy is revised.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding-top: 5rem;
+  }
+
+  .notice {
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+  }
+
+  .notice p {
+    margin: 0;
+  }
+
+  .content {
+    max-width: 78ch;
+  }
+
+  h2 {
+    margin: 2rem 0 0.7rem;
+    color: #fff;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(1.45rem, 3vw, 2rem);
+    letter-spacing: 0;
+  }
+
+  p,
+  li {
+    color: var(--color-muted);
+  }
+
+  a {
+    color: var(--color-accent);
+    border-bottom: 1px solid rgba(0, 180, 255, 0.45);
+  }
+
+  ul {
+    padding-left: 1.25rem;
+  }
+</style>

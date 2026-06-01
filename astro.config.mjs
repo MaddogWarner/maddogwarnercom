@@ -5,7 +5,12 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://maddogwarner.com',
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => !page.endsWith('/privacy/essential-8-knowledge-base/'),
+    }),
+  ],
   output: 'static',
   vite: {
     plugins: [tailwindcss()],
