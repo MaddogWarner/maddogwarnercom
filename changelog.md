@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-06-02
+
+- Updated the site Discord social links to use the public server invite URL.
+
+---
+
 ## 2026-06-01
 
 - Added a standalone Essential 8 Knowledge Base iOS app privacy policy page at `/privacy/essential-8-knowledge-base/` for App Store Connect and in-app privacy access.
