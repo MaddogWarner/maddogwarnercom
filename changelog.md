@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-06-03
+
+- Published the "What I Have Learned Building With Codex and Claude" blog post on the two-model Codex/Claude workflow.
+- Added the WebP hero image asset for the new AI workflow article.
+- Added an SEO title to the new post and added `.DS_Store` to `.gitignore`.
+
+---
+
 ## 2026-06-02
 
 - Updated the site Discord social links to use the public server invite URL.

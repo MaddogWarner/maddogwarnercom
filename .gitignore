@@ -1,6 +1,9 @@
 node_modules/
 dist/
 .astro/
+
+# macOS
+.DS_Store
 .env
 .env.*
 !.env.example

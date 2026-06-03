@@ -1,0 +1,260 @@
+---
+title: "What I Have Learned Building With Codex and Claude"
+seoTitle: "What I Learned Building Software With Codex and Claude | MadDogWarner"
+description: "A practical look at building software, workflows, and this website with two agentic AI tools: Codex and Claude, what works, what still needs human judgement, and why good guidance files matter."
+date: 2026-06-03
+tags: ["ai", "agentic-ai", "codex", "claude", "workflow", "devops"]
+draft: false
+image: "/images/what-i-have-learned-building-with-codex-and-claude.webp"
+---
+
+This site, and a few of the projects behind it, have been built with AI doing the actual code work.
+
+Not "AI helped me write a function".
+
+Not "I asked a chatbot for a regex and then reinvented myself as a startup founder on LinkedIn".
+
+I mean the whole messy workflow: planning, scaffolding, implementation, debugging, testing, deployment notes, documentation, changelogs, review loops, and the occasional reminder that security controls are not decorative.
+
+The odd part is that I have not been sitting there writing the code myself. I have been steering the work through structured prompts, review comments, corrections, and architecture direction, mostly with two agentic AI tools working side by side: Claude and Codex.
+
+The big shift for me has been moving from treating AI like an oracle to treating it like a force multiplier.
+
+The oracle model is tempting. Ask the machine, receive the answer, move on. The problem is that AI can sound most confident right before it drives into a wall. That is not a criticism as much as an operating constraint. I do not treat Claude or Codex as the knower of all things. I treat them more like colleagues: useful, fast, sometimes brilliant, sometimes wrong, and always worth scrutinising.
+
+That cuts both ways. I challenge their assumptions, but I also expect them to challenge mine. If my plan is vague, they should say so. If I ask for something unsafe, they should push back. If the repo disagrees with my memory of how something works, they should trust the evidence in front of them and call it out.
+
+That is where the workflow starts to get interesting. The best results come when the AI is not just obeying prompts, but participating in the work.
+
+That sounds like magic until you do it for a while. Then it starts to feel more like running a very fast, very literal, sometimes overconfident junior engineering team that can read a repo in seconds but still needs someone in the room who knows when the design is about to walk into traffic.
+
+This post is the first part of that story.
+
+## The short version
+
+Agentic AI is good enough now to build real things. It is not good enough to remove the need for judgement.
+
+With enough structure, Codex and Claude can take a project from idea to working software. I have used them across this Astro site, PowerShell tooling, iOS app work, API services, Docker workflows, documentation, tests, and deployment notes.
+
+But the quality of the output still depends heavily on the quality of the direction.
+
+That is especially true in cyber security and infrastructure work. "It builds" is not the same as "this is safe to run". A working button can still have a bad trust boundary behind it. A neat API can still leak too much information. A generated deployment flow can still miss logging, rollback, rate limiting, authentication, or the boring operational details that become very exciting at 2 am.
+
+I keep reinforcing the same defaults: least privilege, no hardcoded secrets, auditability, rollback paths, clear testing, small changes, and secure-by-design assumptions. The models follow those instructions well once they are explicit.
+
+The problem is that they do not always identify every gap by themselves.
+
+Once the gap is named, though, the repair loop is often excellent. The AI can inspect the code, find the weak assumption, patch it, add validation, update the documentation, and explain what changed. That is genuinely useful. It also proves the human still needs to ask the right questions.
+
+AI has become very capable. It has not become accountable for your architecture.
+
+Annoying, I know. I also wanted the robot to own the CAB paperwork.
+
+## Why I use two models
+
+I have settled into a workflow where Claude and Codex both have a job.
+
+Claude is often better for broad planning, architecture discussions, long-form reasoning, and review. Codex is stronger when I want repo-grounded implementation: read the code, make the change, run the check, fix the thing that failed, and tell me what actually happened.
+
+That split is useful because it gives me contrast.
+
+When Claude writes a plan and Codex implements it, I get some separation between design and execution. When Codex finds that the repo does not quite match the plan, that becomes useful feedback. When Claude reviews the result, I get another angle on the work.
+
+Two models do not make the answer automatically correct. They do make weak assumptions easier to spot.
+
+They explain problems differently. They notice different details. They sometimes disagree in useful ways. That disagreement gives me something to interrogate instead of just accepting one confident answer because it was formatted nicely.
+
+There is also a cost angle. At the moment, I am using Claude Pro and ChatGPT Plus rather than the most expensive plan on either side. Splitting the work across both tools gives me more room to move and lets me use each model where it fits best.
+
+That may change as pricing, limits, models, and tooling change. For now, the two-model approach gives me better throughput and a better review loop than trying to make one AI act as architect, developer, tester, security reviewer, release manager, and emotional support spreadsheet.
+
+## The guidance files matter more than expected
+
+The biggest workflow improvement has been getting serious about the guidance files.
+
+For Claude, that means `CLAUDE.md`.
+
+For Codex, that means `AGENTS.md`.
+
+At first, these feel like admin overhead. Another Markdown file. Another place to write down preferences. Another little shrine to context management because apparently even the future needs onboarding documentation.
+
+Then you start using them properly and realise they are one of the most useful parts of the setup.
+
+The global files set the default operating model. They cover things like language, regional assumptions, technical context, security posture, and how I expect the agent to behave.
+
+The project-specific files are where the real value appears. They tell the agent how this repo works. Which commands matter. Which files are authoritative. How tests run. What design decisions should be preserved. What not to casually refactor because the model discovered an abstraction and got excited.
+
+A sanitised example looks like this:
+
+```md
+## Working Style
+
+- Read the project documentation before changing files.
+- Prefer small, targeted edits.
+- Preserve the existing architecture unless asked to change it.
+- State assumptions when requirements are unclear.
+- Validate behaviour after implementation.
+```
+
+Simple, but useful. It changes the prompt from "please build this feature" to "please build this feature without turning the repo into generated soup".
+
+For security work, I make the defaults more direct:
+
+```md
+## Security Defaults
+
+- Do not hardcode secrets, tokens, API keys, certificates, or connection strings.
+- Use environment variables, managed identities, or secret managers where appropriate.
+- Apply least privilege by default.
+- Consider logging, auditability, rollback, and operational impact.
+- Call out unsafe patterns before implementing them.
+```
+
+That does not guarantee perfect output. It raises the floor.
+
+The collaboration guidance matters too. I have had good results making the models aware that they are not working alone:
+
+```md
+## Multi-Agent Workflow
+
+- Treat Claude plans as architectural context unless verified repo behaviour proves otherwise.
+- Treat Codex changes as implementation detail that should stay aligned with the agreed plan.
+- Surface technical, security, or operational concerns early.
+- Use shared Markdown plans, changelogs, and review notes for hand-off context.
+```
+
+The important part is role clarity.
+
+If Claude is leading the plan and Codex is implementing, say that. If Codex should challenge a plan when the repo disagrees, say that too. If both agents should avoid unrelated refactors, write it down where they can see it.
+
+Otherwise you spend half your time re-prompting the same rules into a chat window like a tired wizard with a project deadline.
+
+## The workflow that actually works
+
+The practical setup has changed a lot.
+
+VS Code is the cockpit. Both agents work against the same project context. The development environment is backed by a Docker-based server that can be reached over SSH, which means the agents can do more than suggest commands for me to run manually.
+
+They can inspect the repo. Run tests. Start services. Validate builds. Check logs. Update docs. Fix the thing they broke after confidently explaining that it was fixed.
+
+That last part matters.
+
+AI-assisted development gets much weaker when the model cannot observe the result. If the AI can generate code but cannot run the app, inspect the failure, and iterate, the human becomes the test harness. That still works, but it is slower and more annoying.
+
+Giving the agents controlled access to the dev environment changes the workflow from this:
+
+```text
+AI writes code
+Human runs command
+Human pastes error
+AI guesses fix
+Human runs command again
+Everyone ages slightly
+```
+
+to this:
+
+```text
+AI reads repo
+AI makes a scoped change
+AI runs the check
+AI inspects the failure
+AI fixes the issue
+Human reviews the result
+```
+
+That is a better division of labour.
+
+The hand-off model has also changed.
+
+The earlier workflow relied mostly on shared Markdown files: plans, implementation notes, review files, changelogs, and task lists. That still works very well. It is cheap, durable, easy to inspect, and gives both models a stable source of truth.
+
+More recently, I have been experimenting with letting Claude and Codex work more directly through their CLI tools. That creates more interesting hand-offs, where one agent can brief or invoke the other instead of relying on me to copy context between them.
+
+It is useful, but it costs more.
+
+Direct agent-to-agent CLI workflows burn more tokens than shared Markdown. Context gets repeated. Summaries can be too short or too long. The hand-off can become harder to audit if the important decisions are not captured somewhere stable.
+
+So I still like Markdown for routine hand-offs. It is searchable, versionable, and boring in the exact way project memory should be boring.
+
+Apparently the future of software engineering still involves maintaining decent notes. Devastating development.
+
+## Where the human still matters
+
+The best results come when I treat the AI like a capable engineering team that still needs direction, constraints, and review.
+
+Security is the obvious example.
+
+I can tell the models to build securely, and they usually try. They avoid obvious hardcoded secrets. They suggest environment variables. They add validation. They talk about least privilege. They often raise sensible concerns.
+
+But "secure" is not a single instruction.
+
+Secure for which users? Which data? Which threat model? Which environment? Which compliance obligations? What is public? What is private? What needs authentication? What needs rate limiting? What should be logged? What should never be logged? What happens when the dependency fails? What happens when someone calls the API directly instead of politely using the UI?
+
+Those questions still need a guiding hand.
+
+In my experience, someone with a solid grounding in IT, infrastructure, and cyber security gets much better results from AI than someone treating it like an app vending machine. That does not mean you need to type every line of code yourself. I am fairly committed to proving the opposite.
+
+It does mean you need to know enough to challenge the output.
+
+When an app handles sensitive data, "it builds" is not enough.
+
+When a tool makes system changes, "the button works" is not enough.
+
+When an API is public, "the frontend hides the option" is absolutely not enough. That one should be printed on a mug and thrown gently at every product meeting.
+
+The AI is excellent once the risk is named. If I call out that an endpoint needs rate limiting, audit logging, stricter input validation, or clearer separation between public and privileged functions, it can usually implement the fix quickly and explain the change.
+
+The gap is that I often still need to say: stop, that assumption is unsafe.
+
+That is not a failure of the workflow. That is the workflow.
+
+## Token discipline and hand-offs
+
+Token management is one of the less glamorous parts of this.
+
+The better the guidance files become, the less repeated prompting I need. Instead of re-explaining style, security posture, testing expectations, regional context, and collaboration rules every session, I can put stable instructions into global and project files.
+
+That saves tokens, but more importantly it saves attention.
+
+A good plan file can carry intent, constraints, acceptance criteria, risks, and open questions across sessions. A changelog records what changed and why. A review note gives the next agent something concrete to verify instead of making it rediscover the project from scratch.
+
+Direct CLI collaboration is more capable when the interaction itself matters. It helps when one model needs to interrogate another plan, request an implementation pass, or ask for a targeted review.
+
+For routine context, Markdown is still hard to beat.
+
+Cheap. Searchable. Versionable. Boring.
+
+The holy trinity of things that keep projects alive.
+
+## What comes next
+
+The next step is making the workflow more deliberate.
+
+I want the global and project guidance files to keep improving. I want Claude and Codex to understand their roles without a long warm-up prompt every time. I want the agents to test their own work through the dev environment, capture the result, and hand off cleanly.
+
+The rough model is:
+
+- Claude for broad architecture and review
+- Codex for implementation and repo-grounded debugging
+- shared Markdown for durable context
+- CLI hand-offs when deeper collaboration is worth the extra token cost
+- human review for intent, security, risk, and final judgement
+
+The interesting part is not that AI can write code. That part is obvious now.
+
+The interesting part is that a non-developer, with enough technical grounding and a disciplined workflow, can direct the creation of real software without manually writing the code. That changes who can build things.
+
+It does not remove the need for engineering judgement. It moves the judgement up a level.
+
+You still need to understand systems. You still need to understand risk. You still need to know when the answer is too neat, when the test is too shallow, when the deployment story is missing, and when the security control is mostly vibes wearing a fake moustache.
+
+AI can build a lot now.
+
+But someone still needs to steer.
+
+This one is also partly credited to two dear friends, Aaron and Neil, who encouraged me to write about this workflow as something that might be useful to others. Maybe many. Maybe a few. Either way, blame has now been correctly distributed.
+
+Your favourite disgruntled sudoer signing off.
+
+- MadDogWarner :D
