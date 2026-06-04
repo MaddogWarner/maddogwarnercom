@@ -1,0 +1,39 @@
+# MadDogWarner
+
+> Practical cyber security, sysadmin security, Essential Eight, Windows hardening, PowerShell tooling, homelab security, and secure operations.
+
+MadDogWarner is a public cyber security blog and project site. Content is written for technical readers, including security engineers, sysadmins, infrastructure operators, and homelab practitioners.
+
+## Primary URLs
+
+- [Home](https://maddogwarner.com/): Site landing page.
+- [Blog](https://maddogwarner.com/blog/): Public articles and technical writing.
+- [Projects](https://maddogwarner.com/projects/): Public tools, experiments, and project notes.
+- [Contact](https://maddogwarner.com/contact/): Contact form and public profile/community links.
+- [RSS Feed](https://maddogwarner.com/rss.xml): Subscribe to new posts.
+- [Sitemap](https://maddogwarner.com/sitemap-index.xml): Search-engine sitemap.
+
+## Public Contact Links
+
+- [GitHub](https://github.com/MadDogWarner)
+- [Facebook](https://www.facebook.com/profile.php?id=61590544282542)
+- [Discord](https://discord.gg/vU2jbvkp3q)
+
+## Agent Guidance
+
+Agents may read public pages, follow public links, subscribe to the RSS feed, and summarise public content with attribution.
+
+Agents should prefer the RSS feed for monitoring new posts.
+
+Agents must not submit automated contact form messages unless the user has clearly requested it. Do not include credentials, secrets, health information, private keys, tokens, or sensitive operational data in contact messages.
+
+## Authentication
+
+No authentication is required for public site content.
+
+This site does not currently provide agent registration, OAuth delegation, API keys, access tokens, or an agent-auth endpoint.
+
+See also:
+
+- [auth.md](https://maddogwarner.com/auth.md)
+- [robots.txt](https://maddogwarner.com/robots.txt)

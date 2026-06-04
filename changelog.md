@@ -6,6 +6,7 @@ This project follows a simple changelog format. Add new entries at the top under
 
 ## 2026-06-03
 
+- Added `llms.txt` and `auth.md` discovery files for agent-readable site guidance, RSS subscription discovery, contact links, and authentication boundaries.
 - Published the "What I Have Learned Building With Codex and Claude" blog post on the two-model Codex/Claude workflow.
 - Added the WebP hero image asset for the new AI workflow article.
 - Added an SEO title to the new post and added `.DS_Store` to `.gitignore`.
