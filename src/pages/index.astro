@@ -61,7 +61,7 @@ const latestPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.val
   date: post.data.date,
   tags: post.data.tags,
   excerpt: post.data.description,
-  slug: post.slug,
+  slug: post.id.replace(/\.mdx?$/, ''),
 }));
 ---
 

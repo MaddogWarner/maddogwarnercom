@@ -12,7 +12,7 @@ const posts = (await getCollection('blog'))
     date: post.data.date,
     tags: post.data.tags,
     excerpt: post.data.description,
-    slug: post.slug,
+    slug: post.id.replace(/\.mdx?$/, ''),
   }));
 
 const tags = [...new Set(posts.flatMap((post) => post.tags))].sort();
