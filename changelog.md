@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-06-12
+
+- Published the "NPM Security: Easy Wins Before the Package Manager Bites You" blog post covering Socket Firewall, lockfile linting, `npm ci`, package hygiene, release-age delays, install-script controls, and git dependency restrictions.
+- Added a generated WebP hero image for the NPM security article.
+
+---
+
 ## 2026-06-03
 
 - Added `llms.txt` and `auth.md` discovery files for agent-readable site guidance, RSS subscription discovery, contact links, and authentication boundaries.

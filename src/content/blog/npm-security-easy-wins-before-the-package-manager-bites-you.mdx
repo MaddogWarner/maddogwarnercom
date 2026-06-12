@@ -1,0 +1,334 @@
+---
+title: "NPM Security: Easy Wins Before the Package Manager Bites You"
+seoTitle: "NPM Security Easy Wins for Safer JavaScript Installs | MadDogWarner"
+description: "Practical npm supply-chain security controls for developers: Socket Firewall, lockfile linting, npm ci, package hygiene, release-age delays, install-script controls, and git dependency restrictions."
+date: 2026-06-12
+tags: ["cybersecurity", "npm", "supply-chain-security", "javascript", "devsecops"]
+draft: false
+image: "/images/npm-security-easy-wins.webp"
+---
+
+NPM security matters because modern JavaScript projects do not just install code. They install other people's code, those people's dependencies, the dependencies behind those dependencies, and occasionally a small haunted forest of lifecycle scripts with opinions.
+
+That is the trade-off.
+
+The npm ecosystem exists because reusable packages make development faster. It gives JavaScript and Node.js developers a public registry, a package manager, versioning, dependency resolution, lock files, scripts, and a way to avoid writing every string parser, date helper, bundler plug-in, test runner, and left-handed JSON tickler from scratch.
+
+Good. We like not writing everything from scratch.
+
+But npm is also a supply-chain entry point. A single package can pull in hundreds of transitive dependencies. Install scripts can run during dependency installation. Lock files can quietly redirect package tarballs. A compromised maintainer account can turn yesterday's trusted package into today's incident ticket.
+
+That does not mean every developer needs to become a full-time package forensics analyst. It does mean `npm install` deserves more respect than a shrug and a coffee.
+
+This post is about the boring controls that are easy to adopt and actually help.
+
+## Why npm has been getting attention
+
+NPM supply-chain risk is not theoretical.
+
+In September 2025, the [Shai-Hulud npm worm](https://github.blog/security/supply-chain-security/our-plan-for-a-more-secure-npm-supply-chain/) spread through compromised packages and abused the trust developers place in package installation. GitHub responded with a broader npm security plan covering stronger authentication, token lifecycle changes, and trusted publishing improvements.
+
+In March 2026, the Axios project tracked a [compromise involving malicious npm releases](https://github.com/axios/axios/issues/10604). That incident was another reminder that popular packages are high-value targets. If an attacker can get into the publish path, popularity becomes distribution.
+
+The pattern is familiar:
+
+- compromise a maintainer, token, build process, or package namespace
+- publish a malicious version
+- rely on automatic installs, loose version ranges, or inattentive review
+- steal secrets, modify build artefacts, phone home, or spread further
+
+None of the controls below solve the whole problem. That is not how supply-chain security works. What they do is make the easy attack paths less easy, and they do it without requiring a six-month programme called "Strategic Dependency Trust Uplift 2030".
+
+Security teams may be disappointed by the lack of a steering committee. Developers may be relieved.
+
+## Use Socket Firewall before installing random packages
+
+[Socket CLI](https://github.com/SocketDev/socket-cli) can audit an install before npm runs it:
+
+```bash
+npm install -g socket
+socket npm install
+```
+
+That puts a supply-chain security check in front of the normal install flow. Socket looks for suspicious package behaviour such as malware indicators, install scripts, typo-squatting, risky permissions, obfuscated code, and other patterns that a vulnerability scanner may not catch.
+
+That distinction matters.
+
+`npm audit` is useful for known vulnerabilities. It is less useful when the problem is "this brand new package version appears to be doing crime". Vulnerability databases are not time machines, despite what some dashboards seem to imply after three coffees and a product demo.
+
+Socket Firewall is useful when:
+
+- a developer is adding a new dependency
+- a project is refreshing dependencies
+- CI should block obviously suspicious package changes
+- the team wants a quick signal before code from the internet lands in `node_modules`
+
+What to watch:
+
+- it can add friction if every install requires a remote policy decision
+- some findings need human judgement
+- commercial policy features may need organisation setup and API tokens
+- it should complement code review, not replace it
+
+The best fit is usually to use it on developer machines for new dependency work and in CI for dependency changes. That catches the "why is this package trying to run a credential vacuum cleaner" class of problem before it becomes a release note.
+
+## Lint the lock file
+
+The lock file is not just dependency admin. It is a map of what npm will fetch.
+
+NPM's [`package-lock.json` documentation](https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json/) explains that the lock file records dependency tree information, including resolved package locations and integrity data. That is useful for reproducibility, but it also makes the lock file worth reviewing.
+
+[lockfile-lint](https://github.com/lirantal/lockfile-lint) checks whether lock files follow expected trust rules:
+
+```bash
+npx lockfile-lint \
+  --path package-lock.json \
+  --type npm \
+  --allowed-hosts npm \
+  --validate-https
+```
+
+This helps detect poisoned lock files, unexpected tarball hosts, plain HTTP URLs, or lock file changes that point away from the registry you thought you were using.
+
+That is a good control because lock files are easy to skim badly. A pull request that changes 800 lines of JSON is not exactly inviting careful human review. It is the file equivalent of someone saying "just a small dependency update" while standing next to a smoking crater.
+
+What to watch:
+
+- private registries need to be added to the allowed-hosts policy
+- GitHub Packages, scoped registries, and mirrors may need explicit rules
+- it does not prove a package is safe; it proves the lock file obeys your source policy
+
+For most teams, this is cheap CI hygiene. If the lock file fetches from somewhere unexpected, fail the build and ask why.
+
+## Use npm ci in CI
+
+CI should install exactly what the lock file says.
+
+[`npm ci`](https://docs.npmjs.com/cli/v11/commands/npm-ci/) is built for that. It requires an existing lock file, removes the existing `node_modules`, installs from the lock file, and fails when `package.json` and the lock file disagree.
+
+That is what you want in build pipelines.
+
+```bash
+npm ci
+npm test
+npm run build
+```
+
+Use `npm install` when you are intentionally changing dependencies. Use `npm ci` when CI is proving the project still builds from the dependency set already committed.
+
+Security advantages:
+
+- reduces accidental dependency drift in CI
+- makes builds more repeatable
+- forces lock file updates to be explicit
+- makes dependency changes visible in review
+
+What to watch:
+
+- it deletes `node_modules`, so do not use it in a workflow that expects manual local edits under that folder
+- lock file mismatches fail the install, which is the point
+- npm version differences can still matter, so pin your build image or Node/npm version where possible
+
+If CI uses `npm install`, the build can quietly become a dependency resolver with a badge. That is not a control. That is a slot machine with logs.
+
+## Use fewer packages
+
+This one is not fancy. It is also one of the better controls.
+
+Every dependency is code you did not write, review, release, or directly control. Every transitive dependency is more of that. A package may be perfectly fine today and compromised tomorrow. A maintainer may hand it over. A package may be abandoned. A tiny helper may drag in a larger tree than the feature it supports.
+
+Before adding a package, ask:
+
+- is this doing enough work to justify the dependency?
+- can the platform already do this?
+- is the package actively maintained?
+- does it have install scripts?
+- does it have a small dependency tree?
+- does it run in production, build time, or only tests?
+
+Use simple inspection commands:
+
+```bash
+npm ls --all
+npm query ':attr(scripts, [postinstall])'
+npm outdated
+```
+
+The aim is not dependency minimalism as a religion. The aim is to avoid installing half the internet because someone did not want to write six lines of string handling.
+
+What to watch:
+
+- removing packages can create subtle behaviour changes
+- replacing a well-maintained package with home-grown code is not always safer
+- fewer dependencies still need patching, review, and ownership
+
+This is a maintenance control as much as a security control. Smaller trees are easier to reason about, faster to review, and less likely to surprise you during incident response.
+
+## Add a two-day release-age delay
+
+New malicious package versions often do the most damage quickly. A release-age delay gives the ecosystem a little time to detect and report obvious badness before your project installs the freshest possible regret.
+
+NPM 11 exposes `min-release-age` in config. The value is a duration string, so two days is `2d`:
+
+```ini
+# .npmrc
+min-release-age=2d
+```
+
+The idea is simple: do not install package versions until they have existed for at least two days.
+
+That helps with:
+
+- fast-moving malware campaigns
+- compromised maintainers publishing a malicious latest version
+- typo-squat packages that get reported quickly
+- CI pulling a version that appeared five minutes ago
+
+What to watch:
+
+- emergency patches may need an override
+- brand new packages will not install until they age past the policy
+- teams should document who can override it and why
+- it does not help if the malicious version has already aged past the delay
+
+Two days is not magic. It is a speed bump. But speed bumps are useful when the thing coming at you is a compromised package release with a clipboard full of environment variables.
+
+If your project has urgent patch needs, make the override explicit:
+
+```bash
+npm install some-package@1.2.3 --min-release-age=0
+```
+
+Then review that change properly. An override should be a conscious decision, not a mystery hidden in someone's user-level npm config.
+
+## Disable install scripts by default
+
+Install scripts are powerful. Sometimes they are legitimate. Sometimes they compile native modules. Sometimes they download platform-specific binaries. Sometimes they do something you will later describe to an incident responder while staring at the ceiling.
+
+NPM supports disabling lifecycle scripts:
+
+```ini
+# .npmrc
+ignore-scripts=true
+```
+
+That blocks package lifecycle scripts during install, including common install-time hooks such as `preinstall`, `install`, and `postinstall`.
+
+Security advantages:
+
+- reduces arbitrary code execution during dependency installation
+- limits common malware execution paths
+- makes suspicious packages less immediately dangerous
+- forces teams to identify which packages truly need install-time code
+
+What to watch:
+
+- packages with native modules may fail or behave differently
+- binary-downloading packages may need an approved path
+- some development tooling assumes install scripts run
+- disabling scripts globally can break unrelated projects on a developer workstation
+
+For team projects, prefer a project `.npmrc` so the policy travels with the repo:
+
+```ini
+ignore-scripts=true
+```
+
+If a package genuinely needs scripts, approve it deliberately rather than allowing every dependency to run code at install time. Current npm supports install-script policy through `allow-scripts`, the `allowScripts` package field, and stricter script approval behaviour in newer CLI versions. Keep that approval list short and review it like code.
+
+A useful pattern is:
+
+```json
+{
+  "allowScripts": {
+    "esbuild": true,
+    "sharp": true
+  }
+}
+```
+
+Do not copy that example blindly. Approve the packages your project actually needs. The point is to move from "anything can run" to "these reviewed packages can run".
+
+## Restrict git dependencies
+
+Registry packages are not the only dependency source npm can fetch.
+
+Git dependencies let `package.json` point at a repository rather than a versioned package from the registry. That can be useful for internal development, hotfixes, or niche packages. It can also bypass some of the controls your team expects from registry-published packages.
+
+NPM has an `allow-git` config:
+
+```ini
+# .npmrc
+allow-git=none
+```
+
+For projects that intentionally use top-level git dependencies:
+
+```ini
+allow-git=root
+```
+
+The difference is practical:
+
+- `none` blocks git dependencies
+- `root` allows git dependencies declared by your project, but blocks git dependencies introduced deeper in the tree
+- `all` allows any git dependencies
+
+Security advantages:
+
+- reduces surprise fetches from Git repositories
+- keeps dependency sources closer to the registry and lock file policy
+- limits transitive dependencies from adding new fetch paths
+- supports a cleaner review story in enterprise environments
+
+What to watch:
+
+- internal packages may need `root`
+- legacy projects may already rely on git dependencies
+- this does not remove dependencies already installed
+- private registry and monorepo workflows may need testing before rollout
+
+For most application repos, `allow-git=none` is a good default. If a project really needs git dependencies, use `allow-git=root` and make those entries visible in `package.json`.
+
+Git dependencies should not appear in your supply chain like a surprise guest at a change advisory board.
+
+## A practical baseline
+
+If I were setting a sane default for a typical application repo, I would start with this:
+
+```ini
+# .npmrc
+min-release-age=2d
+ignore-scripts=true
+allow-git=none
+```
+
+Then add CI checks:
+
+```bash
+npm ci
+npx lockfile-lint --path package-lock.json --type npm --allowed-hosts npm --validate-https
+socket npm install
+```
+
+For private registries, adjust the lockfile host policy. For projects that need native build packages, approve only the required install scripts. For projects with intentional git dependencies, use `allow-git=root` and document why.
+
+This is not a complete supply-chain security programme. You still need MFA, trusted publishing where possible, short-lived tokens, dependency review, vulnerability management, secrets hygiene, build provenance, and the usual operational discipline that makes software less exciting in production.
+
+But these controls are easy enough to start with:
+
+- scan installs before trusting them
+- lock dependency sources down
+- build from the lock file
+- keep dependency trees smaller
+- avoid bleeding-edge package versions by default
+- stop every package from running install-time code
+- block surprise git dependency fetches
+
+That is a decent return for a small amount of effort.
+
+And if a package manager is going to invite half the internet into your build process, the least we can do is check the guest list.
+
+Your favourite dependency bouncer signing off.
+
+- MadDogWarner :D
