@@ -1,0 +1,251 @@
+---
+title: "Context Is Not Free: RAGs, Wikis, Skills, and the Cost of Agentic AI"
+seoTitle: "Context Is Not Free: RAGs, Wikis, Skills, and Agentic AI Costs | MadDogWarner"
+description: "A practical look at stale RAGs, lightweight LLM wikis, skills, subagents, loops, goals, and why prompt and context engineering still matter when tokens are not unlimited."
+date: 2026-06-21
+tags: ["ai", "agentic-ai", "codex", "claude", "workflow", "llm"]
+draft: false
+image: "/images/context-is-not-free-rags-wikis-skills-agentic-ai.webp"
+---
+
+AI tooling advice has a habit of assuming you are sitting on the expensive plan with a giant context budget and enough usage headroom to let the robots wander around the repo all afternoon.
+
+That is not how a lot of people are actually using these tools.
+
+Plenty of us are trying to get serious work done on normal paid plans, split across Claude, Codex, VS Code, terminals, local repos, and the occasional coffee-fuelled decision that seemed perfectly reasonable at midnight. The models are getting better very quickly, but the limits still exist. Tokens still matter. Context still matters. Bad context still makes good models worse.
+
+That last point is the one I keep coming back to.
+
+The smarter the model gets, the more painful stale supporting material becomes. A weaker model might need heavy scaffolding just to stay on track. A stronger model can reason further, challenge assumptions better, and recover from ambiguity faster, but only if the context you give it is accurate enough to trust.
+
+Feed a strong model a stale RAG, an overgrown skill library, and a pile of old project notes, and you have not built an AI engineering system. You have built a very confident intern with access to a filing cabinet full of bad advice.
+
+## The hidden tax on context
+
+RAG has a good reputation for a reason.
+
+Retrieval augmented generation is useful when the model needs access to material that is outside its training data or outside the current conversation. Enterprise documentation, internal runbooks, ticket history, compliance references, product notes, architecture records, vendor docs, and support procedures all fit that pattern.
+
+The trap is treating RAG as if it is free memory.
+
+It is not.
+
+A RAG pipeline has its own lifecycle. Documents need to be cleaned, chunked, embedded, indexed, retrieved, ranked, and injected into the model context. The moment the underlying material becomes stale, the retrieval layer can start dragging old assumptions into fresh work.
+
+That is annoying in a normal chatbot.
+
+In an agentic coding or operations workflow, it can be much worse.
+
+The model may inspect the repo and see the current implementation. Then the RAG retrieves an old design note that says the opposite. Or it pulls a half-retired deployment process. Or it finds a planning document that was useful three months ago, before the model, the tool harness, the repo structure, and the user workflow all changed.
+
+Now the model has to decide which source to trust.
+
+Sometimes it will do the right thing and challenge the stale note. Sometimes it will blend the two into something that sounds sensible and is quietly wrong. That second outcome is where reliability goes to die wearing a neatly formatted Markdown heading.
+
+## Better models expose worse context
+
+There is a weird inversion happening.
+
+When models were weaker, the instinct was to feed them more instructions, more examples, more retrieval, more guardrails, more everything. A big context dump felt safer because the model needed more help.
+
+Now the models are improving fast enough that old context strategies can become the bottleneck.
+
+If your RAG was tuned around an older model's weaknesses, it might now be over-serving context the newer model does not need. If your summaries were written to compensate for a model that struggled with long reasoning, those summaries might now hide useful detail from a model that could have handled the source material directly. If your retrieval system keeps injecting old architectural decisions because they score well semantically, the model may spend tokens negotiating with stale assumptions.
+
+This does not mean RAG is dead.
+
+It means the maintenance burden is real.
+
+The retrieval layer needs to evolve as the model evolves. Chunking strategy, metadata, source freshness, deletion handling, ranking, summarisation, and prompt placement all matter. If nobody is iterating that system, the model can get smarter while the context pipeline keeps handing it yesterday's map.
+
+That is not a model failure. That is an information hygiene failure.
+
+## Why I like the lighter LLM wiki
+
+My current preference for personal and project workflow memory is not a vector RAG. It is a lightweight Markdown wiki.
+
+The local knowledge base I use with Claude and Codex is deliberately boring. There is an `INDEX.md` file that says what each page is for, when to load it, and which page should stay out of context unless it matches the task. It is human-readable. It is searchable. It is easy to edit. It does not need embeddings, a vector database, a retrieval service, or a rebuild job every time I correct a sentence.
+
+That shape matters.
+
+The index acts like a router:
+
+- writing or editing a blog post loads the site guide and writing style
+- coding work loads the secure coding standards
+- repo triage loads the GitHub workflow
+- Claude and Codex hand-off work loads the collaboration guide
+
+The model reads the index, then loads only what is relevant.
+
+That is less glamorous than a RAG stack. It is also easier to keep honest.
+
+If a rule is wrong, I can fix the Markdown. If a page is stale, I can prune it. If a task only needs the writing guide, the model does not need to ingest every repo note I have ever written about Docker, Homebridge, AdGuard, Essential Eight, and whatever other project has decided to become today's character-building exercise.
+
+That does not scale to every enterprise use case. A hospital, bank, or large software company with millions of documents is going to need proper retrieval, permissions, audit controls, and lifecycle management.
+
+But for a personal AI engineering workflow, a project wiki can beat a heavyweight RAG because it is easier to maintain at the same speed the workflow is changing.
+
+The trick is not "more memory".
+
+The trick is the right memory, loaded at the right time, with a human still responsible for keeping it true.
+
+## Plan size changes the advice
+
+A lot of the public advice around Claude Code, Codex, agent teams, parallel workers, and automated loops quietly assumes generous usage headroom.
+
+That is understandable. The people writing the loudest posts are often power users. They are testing the edges. They are on the larger plans, enterprise seats, API billing, or a mixture of everything. Their advice may be technically correct for their budget.
+
+It may still be bad advice for yours.
+
+OpenAI's current [Codex pricing page](https://developers.openai.com/codex/pricing) describes Plus as suitable for a few focused coding sessions each week, with Pro offering higher Codex usage than Plus. That difference matters. If the official positioning itself distinguishes "focused sessions" from heavier use, then workflow design should respect that.
+
+The same applies across Claude Code. The [Claude Code overview](https://code.claude.com/docs/en/overview) covers a lot of powerful surfaces: terminal, IDE, desktop, web, scheduled work, subagents, hooks, skills, MCP, and automation. Useful tools. Dangerous toys if you turn them all on without thinking about the bill, the context, or the review burden.
+
+On a smaller plan, the best workflow is often not the most automated workflow.
+
+Sometimes the cheapest token is the one you do not spend because you wrote a better prompt yourself.
+
+That sounds less futuristic than "agent swarm", but it works. A clear brief, a narrow goal, the relevant files, and a small acceptance test can beat a huge context buffet where the model spends half the run deciding which old instruction file deserves its loyalty.
+
+## Skills are useful, until they become clutter
+
+Skills are one of the better ideas in modern agent tooling.
+
+The [Codex skills documentation](https://developers.openai.com/codex/skills) describes skills as packaged instructions, resources, and optional scripts for repeatable workflows. It also points out a key design detail: skills use progressive disclosure. Codex starts with a compact list of available skills, then loads the full skill instructions only when a skill is selected.
+
+That is a sensible design.
+
+It still does not mean you should install or write a skill for every passing thought.
+
+Each skill needs a clear trigger. Each description needs boundaries. Each skill that overlaps with another skill increases the chance that the model selects the wrong workflow or spends context deciding between them. A skill that contains too much broad advice can become the same problem as a bloated `AGENTS.md`: it feels helpful because it says many correct things, but it is no longer sharp enough to guide the task in front of it.
+
+Skills should earn their place.
+
+I like them for repeatable work with a recognisable shape: creating an `AGENTS.md`, working with documents, generating images, handling PDFs, or following a known review process. I am less convinced by turning every preference into a skill when a short prompt would do.
+
+If you are on a lower-usage plan, this matters even more. A manually written prompt can be more efficient than invoking a reusable workflow that loads instructions, references, and scripts you barely needed.
+
+That is not anti-skill. It is skill hygiene.
+
+The question is simple: does this skill reduce repeated work enough to justify its context and activation cost?
+
+If the answer is no, write the prompt.
+
+## Subagents are expensive, and still necessary
+
+Subagents are where the token conversation gets more interesting.
+
+The instinctive smaller-plan reaction is to avoid them because each agent does its own model and tool work. That cost is real. Codex's [subagent documentation](https://developers.openai.com/codex/subagents) says plainly that subagent workflows consume more tokens than comparable single-agent runs. Claude's [subagent documentation](https://code.claude.com/docs/en/sub-agents) makes the same practical point in a different way: subagents preserve main-conversation context by doing side work in their own context and returning summaries.
+
+That is exactly why they are useful.
+
+Large tasks create noise. Exploration notes, file searches, test failures, logs, stack traces, and half-formed theories all pile up in the main thread. Even with a large context window, that noise can degrade the quality of later decisions. The main agent starts carrying too much history and not enough signal.
+
+A focused subagent can go and inspect one thing:
+
+- security risk
+- test coverage
+- frontend behaviour
+- build failures
+- migration impact
+- documentation gaps
+
+Then it returns a summary instead of flooding the main conversation with every command it ran.
+
+That can save the main thread from context rot. It can also reduce errors because each agent has a cleaner job. The security reviewer does not need to also be the release-note writer. The build-debugging agent does not need to carry the entire product strategy in its head while reading stack traces.
+
+But subagents need boundaries.
+
+"Spawn agents and look at everything" is a token bonfire.
+
+"Spawn one read-only agent to inspect the auth boundary, one to check missing tests, and one to compare the implementation against this plan. Return only actionable findings with file references" is a workflow.
+
+The difference is not subtle.
+
+Use subagents when the work is genuinely separable or when the main thread is getting polluted with noise. Do not use them to cosplay as an engineering org chart.
+
+## Loops and goals need brakes
+
+Looping agents are useful in the same way background scripts are useful: excellent when bounded, expensive when forgotten.
+
+Claude Code has `/loop` for repeated prompts and scheduled checks, and its docs describe it as a way to poll for status, babysit a PR, or keep checking a long-running build. The same docs also call out that newer harnesses can use monitor-style behaviour to avoid wasteful polling in some cases. Codex has [Goal mode](https://developers.openai.com/codex/prompting#goal-mode), where a persistent objective gives the agent a definition of done across a longer task. Claude Code has a similar [`/goal`](https://code.claude.com/docs/en/goal) feature where a completion condition keeps the session working until the condition is met.
+
+That is powerful.
+
+It is also exactly the kind of thing that can chew through limited usage if the target is vague.
+
+"Keep improving this" is not a goal. It is a hole in the floor.
+
+A good loop or goal needs a stop condition, a proof check, and a constraint. Something like:
+
+- stop when `npm run check` and `npm run build` both pass
+- stop when the draft has frontmatter, a changelog entry, and no route errors
+- stop after three failed attempts and report the blocker
+- do not change deployment settings
+- do not edit unrelated files
+
+The model cannot manage your budget if you give it an infinite task and a cheerful thumbs-up.
+
+Loops are best for waiting, checking, or continuing a bounded repair cycle. Goals are best when there is a measurable end state. Both are worse when used as a substitute for deciding what success looks like.
+
+This is where the "interview me" prompt earns its keep.
+
+Before a large task, ask the agent to interview you until it can state the goal, constraints, success criteria, risks, and test plan. Then turn that into a plan or a `/goal` condition. It feels slower for the first few minutes. It is usually cheaper than letting the model discover your unstated requirements one failed turn at a time.
+
+## Prompt engineering is not dead
+
+Every few months someone declares prompt engineering dead because the models got better.
+
+No.
+
+Bad prompt engineering is dead. Hopefully. Maybe. We can dream.
+
+The useful version is still very alive. It just looks less like magic phrasing and more like operational clarity.
+
+Good prompt and context engineering is knowing:
+
+- what the agent needs to know
+- what it should ignore
+- which files are authoritative
+- what success looks like
+- what checks prove the work
+- what risks matter
+- when to use a subagent
+- when to avoid a skill
+- when to stop feeding context and start making a decision
+
+That is not prompt wizardry. That is engineering management compressed into text.
+
+The lower your usage headroom, the more this matters. A vague prompt burns tokens in clarification, exploration, false starts, and rework. A precise prompt gives the model a narrower search space and a cleaner definition of done.
+
+This is why I still like shared Markdown plans, `AGENTS.md`, `CLAUDE.md`, changelogs, issue notes, and a lightweight wiki. The [Codex AGENTS.md docs](https://developers.openai.com/codex/guides/agents-md) and [Claude memory docs](https://code.claude.com/docs/en/memory) both point at the same basic truth: durable project instructions matter. The exact file names and loading rules differ between tools, but the principle is the same.
+
+Write down the context that should survive the session.
+
+Prune the context that should not.
+
+## The practical rule
+
+My current rule is simple.
+
+Use the lightest context system that can stay accurate.
+
+If a prompt is enough, use a prompt.
+
+If the same prompt keeps coming back, turn it into a small reusable instruction or skill.
+
+If the project needs durable context, write a project file.
+
+If several projects share standards, use a lightweight wiki with an index and selective loading.
+
+If the knowledge base is too large for humans to manage manually, then use RAG, but treat it like infrastructure. It needs lifecycle, ownership, testing, pruning, and monitoring. Otherwise it becomes another stale system quietly feeding wrong answers into a better model.
+
+Better models do not remove the need for context engineering.
+
+They raise the penalty for doing it badly.
+
+That is probably the least glamorous AI take I have, which is unfortunate because it may also be one of the most useful.
+
+Your favourite disgruntled sudoer signing off.
+
+- MadDogWarner :D

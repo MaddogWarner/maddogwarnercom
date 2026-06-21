@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-06-21
+
+- Published "Context Is Not Free: RAGs, Wikis, Skills, and the Cost of Agentic AI" — covers stale RAG risks, lightweight LLM wikis, skills, subagents, loop/goal usage, and token-aware prompt/context engineering.
+- Added an optimised WebP hero image for the article.
+- Improved BlogLayout typography: paragraph spacing, responsive H2/H3 sizing with electric-blue H2 top-border rules, tighter heading-to-paragraph gap, better list rhythm, and mobile margin adjustments.
+- Draft posts now render in dev mode (`import.meta.env.DEV || !post.data.draft`) for local preview before publish.
+
+---
+
 ## 2026-06-12
 
 - Published the "NPM Security: Easy Wins Before the Package Manager Bites You" blog post covering Socket Firewall, lockfile linting, `npm ci`, package hygiene, release-age delays, install-script controls, and git dependency restrictions.
