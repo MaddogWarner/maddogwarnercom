@@ -1,7 +1,7 @@
 # issues.md — Claude Code Review
 
 > Reviewed by Claude against `codex-plan.md` and the built source.
-> Last updated by Codex: 2026-05-20.
+> Last updated by Codex: 2026-07-03.
 
 ---
 
@@ -30,7 +30,7 @@ None.
 ## Current Validation
 
 - `npm run check`: passing, 0 errors, 0 warnings, 0 hints.
-- `npm run build`: passing, 9 pages built.
+- `npm run build`: passing, 18 pages built.
 
 Known pending assets:
 
@@ -40,4 +40,4 @@ Known pending assets:
 
 ---
 
-Review by Claude | Updated 2026-05-21
+Review by Claude | Updated 2026-07-03

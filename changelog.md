@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This project follows a simple changelog format. Add new entries at the top under a dated heading.
 
+## 2026-07-03
+
+- Published a blog post, "The E8 Is Dead, Long Live Essentials", covering ASD's draft Essentials for Enterprise IT transition, Essential Eight control mapping, GPO/Intune/M365 hardening continuity, and planned app/tooling alignment.
+- Added an optimised WebP hero image for the Essentials transition article.
+- Reviewed and polished the post: aligned E8 terminology with official ACSC strategies (e.g. "Microsoft Office macro settings" and "restricting administrative privileges") and added cross-links to related posts on credential-theft controls, the Sysadmin Audit Tool, and the iOS app.
+
+---
+
 ## 2026-06-21
 
 - Published "Context Is Not Free: RAGs, Wikis, Skills, and the Cost of Agentic AI" — covers stale RAG risks, lightweight LLM wikis, skills, subagents, loop/goal usage, and token-aware prompt/context engineering.

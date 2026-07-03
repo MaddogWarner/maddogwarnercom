@@ -1,0 +1,188 @@
+---
+title: "The E8 Is Dead, Long Live Essentials"
+seoTitle: "The E8 Is Dead, Long Live Essentials: ASD's 2026 Shift | MadDogWarner"
+description: "What ASD's draft Essentials for Enterprise IT means for Essential Eight fleets, GPO baselines, M365 controls, and Windows hardening pipelines."
+date: 2026-07-03
+tags: ["cybersecurity", "essential-eight", "essentials", "compliance", "australia"]
+draft: false
+image: "/images/e8-is-dead-long-live-essentials-v2.webp"
+---
+
+The Essential Eight is not dead-dead. It is more like the old SOE image that still boots, still has useful settings in it, and still makes everyone nervous when someone suggests rebuilding the whole thing from scratch.
+
+ASD's draft move toward "Essentials for Enterprise IT", with consultation due to close on 12/07/2026, is the kind of change the industry has needed for a while. The current [Essential Eight maturity model](https://www.cyber.gov.au/business-government/asds-cyber-security-frameworks/essential-eight/essential-eight-maturity-model) gave Australian organisations a shared control language, and that mattered. It forced conversations about application control, patching, macros, MFA, admin rights, backups, and user application hardening into rooms where those topics had previously been hiding under project debt and optimistic risk acceptance notes.
+
+But the estate changed.
+
+Cloud became normal. Hybrid identity became the real perimeter. SaaS platforms started holding data that used to live on file shares. IoT and OT crept into enterprise networks through facilities, clinical systems, telemetry, building management, logistics, and vendor-managed appliances. AI went from a weird side conversation to something users, vendors, developers, SOC teams, and executives are all trying to plug into workflows at once.
+
+The E8 maturity ladder was never going to carry all of that weight forever.
+
+That does not mean the work organisations put into E8 has been wasted. The registry settings, Group Policy objects, Intune profiles, Defender policies, M365 hardening, audit baselines, exception registers, and reporting pipelines built for E8 are not scrap metal. They are the control substrate.
+
+The job now is to map them properly while the final guidance settles.
+
+## The old model was useful, but narrow
+
+ASD is blunt about the current E8 scope. The maturity model was designed for internet-connected enterprise IT networks. ASD also notes that the principles behind the E8 may be applied to enterprise mobility and operational technology, but the model was not designed for those environments and other mitigations may be more appropriate.
+
+That caveat matters in 2026.
+
+Most real fleets are no longer neat Windows workstation and server estates with a tidy domain boundary and a spreadsheet-friendly application list. A normal enterprise environment might include:
+
+- Entra ID and conditional access deciding whether users can reach core data
+- M365, Salesforce, ServiceNow, Atlassian, GitHub, or other SaaS platforms holding sensitive records
+- unmanaged or semi-managed vendor appliances sitting near production systems
+- OT and IoT devices with patch windows measured in "please do not break the building"
+- mobile endpoints and personal devices touching email and collaboration platforms
+- AI services ingesting prompts, files, logs, tickets, summaries, code, and business context
+
+That does not make E8 wrong. It makes a static maturity ladder too tight for the job.
+
+The better direction is principles plus evidence. What are you trying to protect? Which control objective is being met? Where is the technical enforcement point? What is the exception path? What telemetry proves the setting exists and still works?
+
+That is a better question than "are we ML2 yet?" asked loudly enough to make the GPO team regret choosing infrastructure as a career.
+
+## Do not bin the hardening pipeline
+
+The worst possible reaction to a framework change is to declare the old work obsolete and start inventing a new governance circus.
+
+Do not do that.
+
+If you have spent the last few years building E8-aligned baselines, keep them. The draft Essentials direction should change the mapping and reporting layer first, not the engineering foundation.
+
+For Windows fleets, the valuable work is still valuable:
+
+- Office macro restrictions
+- Attack Surface Reduction rules
+- browser hardening
+- PDF reader hardening
+- PowerShell v2 removal, script block logging, module logging, transcription, and constrained language mode where appropriate
+- command-line process creation logging
+- LSA protection, Credential Guard, memory integrity, and driver blocklists
+- application control rulesets and blocklists
+- Defender cloud protection, tamper protection, and exclusion hygiene
+- BitLocker, Secure Boot, SMB signing, firewall profile state, and RDP hardening
+
+*(I wrote a breakdown of how some of these, specifically [memory integrity, LSA protection, and Debug privileges, make credential theft harder](/blog/windows-controls-that-make-credential-theft-harder) in a previous post.)*
+
+ASD's current E8 model already calls out many of these controls under application control, Microsoft Office macro settings, user application hardening, and restricting administrative privileges. Microsoft also documents [ASR rules](https://learn.microsoft.com/en-us/defender-endpoint/attack-surface-reduction-rules-reference) as controls for risky software behaviour such as Office child processes, obfuscated scripts, executable content from email, and code injection.
+
+That is the point: the technical controls remain useful because the attack paths remain useful to attackers.
+
+Office spawning child processes is still bad. Scripts pulling payloads from the internet are still bad. Weak logging still makes incident response miserable. Users changing security settings because a line-of-business app had a tantrum is still a bad day with a change ticket attached.
+
+Essentials should not erase those controls. It should give them a better home.
+
+## The registry still matters
+
+A principles-based framework can sound airy if it is not tied back to configuration state. That is where sysadmins should get stubborn.
+
+Controls live somewhere. In Windows environments they often land as registry values, local policy, GPO-backed settings, Intune configuration, Defender policy, ADMX-backed MDM CSP values, or service configuration. The reporting might change from "E8 ML2 user application hardening" to "Essentials control objective: reduce execution paths from user-facing applications", but the machine still needs an enforceable setting.
+
+Take Office hardening. The current E8 application hardening expectations include blocking Office from creating child processes, creating executable content, injecting code into other processes, and allowing risky macro behaviour. In a Microsoft estate, that commonly becomes ASR policy, macro policy, trusted location governance, publisher validation, and user lockout from changing macro settings.
+
+The new mapping might look different:
+
+| Existing E8 engineering asset | Essentials-style control intent |
+| --- | --- |
+| ASR rule blocking Office child processes | Reduce execution paths from document-handling applications |
+| Office macro policy and trusted publisher controls | Prevent unsafe automation from becoming an initial access path |
+| Browser ad, Java, extension, and security policy hardening | Reduce exposure from user-facing internet content |
+| PowerShell logging and command-line process logging | Preserve evidence for detection, investigation, and response |
+| Application control policy | Restrict unapproved code execution across managed assets |
+| Exception register with owners and review dates | Keep business exceptions visible, approved, and time-bound |
+
+That is not a rebuild. That is translation.
+
+The fleet baseline should become a control evidence layer that can answer both old and new questions:
+
+- which systems received the policy?
+- which systems actually enforced it?
+- which exclusions exist?
+- who approved the exceptions?
+- what is the rollback path if the control breaks a production workflow?
+- what telemetry proves the control is still alive after the next image refresh?
+
+If your GPO, Intune, M365, Defender, and endpoint reporting can answer those questions, you are not starting again. You are ahead.
+
+## Cloud and SaaS need first-class treatment
+
+E8 work often became Windows-heavy because that is where many controls were easiest to inspect. Registry values are wonderfully boring. Cloud services are less polite.
+
+But modern enterprise risk lives heavily in identity and SaaS. A good Essentials transition should pull cloud controls into the same evidence conversation:
+
+- conditional access and phishing-resistant MFA coverage
+- admin role assignment, privileged identity management, and break-glass account monitoring
+- audit log retention and export from Entra ID, M365, cloud platforms, and SaaS systems
+- Defender for Cloud Apps, app consent, OAuth application review, and risky integration control
+- data loss prevention, sensitivity labels, external sharing, and guest access governance
+- service principal and workload identity hygiene
+- cloud configuration baselines with drift detection
+
+ASD's [cloud guidance](https://www.cyber.gov.au/business-government/protecting-devices-systems/cloud-computing) points organisations toward risk management, architecture, shared responsibility, assessment, and secure tenant use. That is a different shape from "set this local registry key", but it still needs the same engineering discipline: desired state, enforcement, evidence, exception handling, monitoring, and rollback.
+
+The control pipeline does not go away just because the setting moved from `HKLM` to a policy blade.
+
+## OT, IoT, and AI are why this shift makes sense
+
+The current E8 is strong on a set of common enterprise IT compromise paths. It is not a full operating model for OT safety, AI data flows, or unmanaged edge devices.
+
+ASD's [Principles of operational technology cyber security](https://www.cyber.gov.au/business-government/secure-design/operational-technology-environments/principles-of-operational-technology-cyber-security) takes a different tone for a reason. OT needs safety, business process knowledge, protected engineering data, segmentation, supply chain assurance, and people who understand the physical system. You cannot treat a building management controller, a clinical device, or a plant system like a laptop that missed Patch Tuesday.
+
+AI has a different problem again. ASD's [AI guidance catalogue](https://www.cyber.gov.au/business-government/secure-design/artificial-intelligence) now covers secure use, data security, supply chain risks, agentic AI services, secure development, AI in cyber defence, and AI in OT. That is the giveaway. The control set needed for AI is not just "patch the endpoint and block macros". It includes data provenance, prompt and output handling, model supply chain, third-party service risk, auditability, and whether someone has quietly pasted sensitive operational data into a tool that now lives outside your normal control plane.
+
+This is why a principles-based direction is net positive. The industry needed room for controls that fit the systems we actually run now.
+
+The trick is keeping the implementation boring enough to trust.
+
+## What a sane transition looks like
+
+Start with the controls you already have. Do not start with a new spreadsheet unless you enjoy watching engineers become emotionally unavailable.
+
+A practical transition path looks like this:
+
+1. Inventory the existing E8 control library: GPOs, Intune profiles, Defender policies, M365 policies, scripts, registry baselines, audit checks, dashboards, exception registers, and change records.
+2. Tag each control by intent, not just by old maturity level: execution control, identity assurance, logging, recovery, exposure reduction, data protection, privileged access, application hardening, and operational resilience.
+3. Map each control to the draft Essentials principles and keep the old E8 mapping beside it until the new guidance is final.
+4. Identify gaps created by cloud, SaaS, OT, IoT, and AI that were never covered well by the old E8 implementation.
+5. Keep the evidence pipeline technical: policy source, endpoint state, telemetry, exception owner, review date, and last validation result.
+6. Update reporting last, after the engineering teams know what the new control objectives mean in actual systems.
+
+That last point matters. If reporting changes before implementation mapping, the organisation gets a new dashboard with old uncertainty underneath. Lovely colours. Same risk.
+
+## What this means for our tools
+
+We will need to transition our apps and tooling as the Essentials guidance settles.
+
+For the [Essential Eight Knowledge Base](/blog/essential-8-knowledge-base-ios-app) and the [Windows hardening assessment work](/blog/essential-eight-sysadmin-audit-tool), that means preserving the useful E8 mappings while adding an Essentials-aligned view of control intent. The current checks should not disappear. A registry-backed ASR result, a PowerShell logging state, an LSA protection value, or a Defender exclusion finding remains useful evidence.
+
+The output needs to become more flexible:
+
+- old E8 maturity references where they remain useful
+- Essentials principle or control-objective mapping
+- technical evidence from the host or policy source
+- operational notes for exceptions and staged rollout
+- clear separation between endpoint hardening, cloud controls, identity controls, and OT/AI-adjacent controls
+
+That is a product change, not a bonfire.
+
+The aim is to help teams carry forward the work they have already done instead of making them rebuild their hardening story because the label on the framework changed.
+
+## The useful version of "E8 is dead"
+
+The headline is deliberately dramatic because apparently I am part blog writer and part compliance nuisance.
+
+The useful reading is this: the static E8 maturity ladder has probably done its best work. It gave Australian organisations a common baseline and forced a lot of necessary uplift. Now the environment has moved far enough that ASD needs a broader, more adaptable model.
+
+That is a good thing.
+
+But the organisations that invested properly in E8 should not panic. If your controls are real, enforced, evidenced, and reviewed, they still matter. If your E8 implementation was mostly a spreadsheet with vibes and screenshots, Essentials will not be the problem. It will just make the existing problem harder to hide.
+
+Keep the baselines. Keep the registry checks. Keep the GPOs. Keep the Intune profiles. Keep the M365 hardening. Keep the audit evidence. Then map them to the new model with enough technical detail that sysadmins, security, compliance, and leadership are all talking about the same control instead of four different colours in four different reports.
+
+Long live Essentials.
+
+Please do not make me rebuild every dashboard by hand.
+
+- MadDogWarner :D
