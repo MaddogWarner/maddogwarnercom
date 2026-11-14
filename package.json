@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "14",
-    "@astrojs/mdx": "^8.1.2",
+    "@astrojs/mdx": "^8.1.4",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
-    "@lucide/astro": "^1.64.0",
-    "@tailwindcss/vite": "^4.3.3",
+    "@lucide/astro": "^1.71.0",
+    "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.12",
     "tailwindcss": "^4.0.0"
   },
